@@ -5,6 +5,8 @@ __v0_jsx-dev-runtime.ts
 .snowflake/
 .v0-trash/
 .vercel/
+.sites-package/
+fisiofes-sites.tar.gz
 
 # Environment variables
 .env*.local
