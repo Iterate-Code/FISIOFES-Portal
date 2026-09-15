@@ -533,3 +533,14 @@ footer { padding: 48px clamp(24px, 8vw, 126px) 26px; color: white; background: v
   .booking-meta { margin-bottom: 38px; }
   .booking-option { min-height: 90px; }
 }
+
+/* Final mobile cascade — keep after shared premium rules */
+@media (max-width: 680px) {
+  body { font-size: 17px; }
+  .hero { min-height: auto; }
+  .hero-copy { min-height: 0; padding: 34px 24px 30px; }
+  .hero h1 { max-width: 340px; font-size: clamp(42px, 12vw, 48px); line-height: .98; }
+  .hero-visual { min-height: 360px; }
+  .hero-visual .photo-placeholder { padding: 26px 24px 110px; }
+  .hero-visual .photo-placeholder strong { font-size: 38px; }
+}
