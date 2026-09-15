@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Activity, ArrowRight, ArrowUpRight, BrainCircuit, Check, ChevronDown, HeartHandshake, MapPin, Menu, MessageCircle, ShieldCheck, Sparkles, TrendingUp, Users, X } from 'lucide-react'
+import { Activity, ArrowRight, ArrowUpRight, BrainCircuit, Check, HeartHandshake, MapPin, Menu, MessageCircle, ShieldCheck, Sparkles, TrendingUp, Users, X } from 'lucide-react'
 
 const contact = '/contacto'
 
@@ -33,9 +33,10 @@ export default function Home() {
     <section className="hero">
       <div className="hero-copy">
         <div className="trust-kicker"><span /> FISIOFES LONGEVITY CLUB</div>
-        <h1>Vive más.<br /><em>Muévete mejor.</em></h1>
-        <p className="hero-lede">Fisioterapia, Pilates y entrenamiento conectados en una ruta personalizada para ayudarte a recuperar movimiento, construir fuerza y seguir haciendo lo que amas.</p>
-        <div className="hero-actions"><Link href="#agendamiento" className="button button-primary">Agenda tu valoración <ArrowRight size={19} /></Link><a href="#ruta" className="button button-ghost">Descubre cómo funciona <ChevronDown size={18} /></a></div>
+        <h1>Tu cuerpo, listo<br /><em>para seguir.</em></h1>
+        <p className="hero-lede">Fisioterapia, Pilates y entrenamiento para aliviar dolor, ganar fuerza y moverte con confianza. A tu edad, a tu ritmo.</p>
+        <div className="hero-actions"><Link href="/precios" className="button button-primary">Ver planes y precios <ArrowRight size={19} /></Link><Link href={contact} className="button button-ghost">Reservar mi primera visita <ArrowRight size={18} /></Link></div>
+        <div className="hero-shortcuts" aria-label="Elige según tu objetivo"><span>QUIERO</span><Link href="/servicios/fisioterapia">Aliviar dolor</Link><Link href="/servicios/pilates">Ganar fuerza</Link><Link href="/servicios/valoracion-funcional-longevidad">Cuidar mi movilidad</Link></div>
         <div className="hero-proof"><div className="proof-faces" aria-hidden="true"><span>45+</span><span>55+</span><span>70+</span></div><p><strong>Un plan tan único como tu vida.</strong><br />Profesionales presentes en cada paso.</p></div>
       </div>
       <div className="hero-visual">
