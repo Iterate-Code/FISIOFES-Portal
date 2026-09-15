@@ -20,9 +20,9 @@ const services = [
 function Header() {
   return <header className="site-header">
     <Link href="/" className="brand-lockup"><img src="/fisiofes-logo.svg" alt="Fisiofes" /></Link>
-    <nav aria-label="Navegación principal"><Link href="#ruta">Cómo funciona</Link><Link href="#rutas">Rutas</Link><Link href="#servicios">Servicios</Link><Link href="/precios">Precios</Link><Link href="#comunidad">Comunidad</Link></nav>
-    <Link href="#agendamiento" className="header-cta">Agendar cita <ArrowUpRight size={17} /></Link>
-    <details className="mobile-menu"><summary aria-label="Abrir menú"><Menu className="open-icon" /><X className="close-icon" /></summary><div className="mobile-menu-panel"><Link href="#ruta">Cómo funciona</Link><Link href="/servicios">Servicios</Link><Link href="/servicios/valoracion-funcional-longevidad">Longevidad</Link><Link href="#comunidad">Comunidad</Link><Link href="/precios">Planes</Link><Link href={contact} className="button button-dark">Reservar</Link></div></details>
+    <nav aria-label="Navegación principal"><Link href="#rutas">Encuentra tu ruta</Link><Link href="/servicios">Servicios</Link><Link href="#sedes">Sede y horarios</Link></nav>
+    <div className="header-actions"><Link href="/precios" className="header-link">Planes y precios</Link><Link href="/ingresar" className="header-link">Ingresar</Link><Link href={contact} className="header-cta">Reservar <ArrowUpRight size={17} /></Link></div>
+    <details className="mobile-menu"><summary aria-label="Abrir menú"><Menu className="open-icon" /><X className="close-icon" /></summary><div className="mobile-menu-panel"><Link href="/precios">Planes y precios</Link><Link href="/contacto">Reservar</Link><Link href="/ingresar">Ingresar</Link><Link href="/servicios">Servicios</Link><Link href="#sedes">Sede y horarios</Link></div></details>
   </header>
 }
 function SectionLabel({ children }: { children: React.ReactNode }) { return <p className="eyebrow">{children}</p> }

@@ -10,7 +10,7 @@ const services = [
   { id: 'training', name: 'Entrenamiento funcional', detail: 'Fuerza y capacidad para la vida diaria.' },
 ]
 
-const times = ['6:00 a.m.', '8:00 a.m.', '10:00 a.m.', '4:00 p.m.', '6:00 p.m.']
+const times = ['Temprano · 6–8 a.m.', 'Media mañana · 9–12 m.', 'Tarde · 4–7 p.m.', 'Quiero que me orienten']
 
 export function BookingExperience({ compact = false }: { compact?: boolean }) {
   const [step, setStep] = useState(1)
@@ -38,7 +38,7 @@ export function BookingExperience({ compact = false }: { compact?: boolean }) {
 
     {step === 1 && <div className="booking-step"><p className="eyebrow">EMPECEMOS POR TI</p><h2>¿Qué te gustaría trabajar?</h2><p className="step-lede">No tienes que saber el nombre exacto del servicio.</p><div className="booking-options">{services.map(item => <button type="button" className={service === item.id ? 'booking-option selected' : 'booking-option'} onClick={() => { setService(item.id); setError('') }} key={item.id}><span><strong>{item.name}</strong><small>{item.detail}</small></span>{service === item.id && <Check size={20} />}</button>)}</div></div>}
 
-    {step === 2 && <div className="booking-step"><p className="eyebrow">TU MOMENTO PREFERIDO</p><h2>¿Cuándo te queda mejor?</h2><label className="field"><span>Fecha preferida</span><div className="input-shell"><CalendarDays size={20} /><input type="date" value={day} onChange={event => setDay(event.target.value)} /></div></label><fieldset><legend>Hora preferida</legend><div className="time-options">{times.map(item => <button type="button" onClick={() => setTime(item)} className={time === item ? 'selected' : ''} key={item}><Clock size={17} />{item}</button>)}</div></fieldset><p className="helper">Este horario es una preferencia. El equipo confirmará la disponibilidad contigo.</p></div>}
+    {step === 2 && <div className="booking-step"><p className="eyebrow">TU MOMENTO PREFERIDO</p><h2>¿Cuándo te queda mejor?</h2><label className="field"><span>Fecha preferida</span><div className="input-shell"><CalendarDays size={20} /><input type="date" value={day} onChange={event => setDay(event.target.value)} /></div></label><fieldset><legend>Franja preferida</legend><div className="time-options">{times.map(item => <button type="button" onClick={() => setTime(item)} className={time === item ? 'selected' : ''} key={item}><Clock size={17} />{item}</button>)}</div></fieldset><p className="helper">Revisamos los calendarios de clínica y Pilates/Training y te confirmamos el cupo personalmente.</p></div>}
 
     {step === 3 && <div className="booking-step"><p className="eyebrow">PARA ACOMPAÑARTE</p><h2>¿Cómo podemos contactarte?</h2><div className="field-grid"><label className="field"><span>Nombre completo</span><input autoComplete="name" value={name} onChange={event => setName(event.target.value)} placeholder="Tu nombre" /></label><label className="field"><span>Teléfono o WhatsApp</span><input autoComplete="tel" inputMode="tel" value={phone} onChange={event => setPhone(event.target.value)} placeholder="Tu número" /></label></div><label className="field"><span>¿Qué quieres volver a hacer o mejorar?</span><textarea value={goal} onChange={event => setGoal(event.target.value)} placeholder="Por ejemplo: caminar con más confianza, aliviar el dolor de rodilla…" rows={4} /></label><p className="privacy-line"><ShieldCheck size={18} /> Solo usamos estos datos para orientarte y confirmar tu solicitud.</p></div>}
 
