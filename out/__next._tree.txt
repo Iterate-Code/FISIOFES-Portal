@@ -1,3 +1,3 @@
-:HL["/_next/static/chunks/42t6-6kv46jh0.css","style"]
+:HL["/_next/static/chunks/3cn5u_s8l0g7_.css","style"]
 :HL["/fisiofes-logo.svg","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"oE5qhSIx84FKUImmOnj8A"}
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"bHrBaHbqdMWE7BWzaBRIW"}
