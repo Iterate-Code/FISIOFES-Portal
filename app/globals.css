@@ -428,6 +428,42 @@ footer { padding: 48px clamp(24px, 8vw, 126px) 26px; color: white; background: v
   *, *:before, *:after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
 
+/* Image-first hero — the brand photograph is the first chapter */
+.hero {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.hero-visual {
+  order: 1;
+  min-height: clamp(420px, 47vw, 680px);
+}
+.hero-image {
+  object-position: center 42%;
+}
+.hero-copy {
+  order: 2;
+  width: min(100%, 1440px);
+  margin: 0 auto;
+  padding: clamp(64px, 7vw, 104px) clamp(36px, 8vw, 120px);
+}
+.hero-copy .hero-lede { max-width: 720px; }
+
+@media (max-width: 680px) {
+  .hero-visual {
+    min-height: 330px;
+  }
+  .hero-image {
+    object-position: 56% center;
+  }
+  .hero-copy {
+    padding: 42px 24px 34px;
+  }
+  .hero-visual .humanity-note {
+    top: 14px;
+  }
+}
+
 /* Premium longevity direction — calm, tactile and easy to read */
 :focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; }
 .site-header { position: sticky; top: 0; background: rgba(244,248,249,.92); }
