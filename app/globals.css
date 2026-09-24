@@ -13,9 +13,9 @@
 
 :root {
   color-scheme: light;
-  --background: #f4f8f9;
-  --surface: #ffffff;
-  --surface-soft: #e8f5f6;
+  --background: #ede9e0;
+  --surface: #fbfaf6;
+  --surface-soft: #f3efe7;
   --ink: #173b50;
   --ink-deep: #102f43;
   --muted: #55717f;
@@ -23,7 +23,7 @@
   --aqua-bright: #8ce7e8;
   --aqua-dark: #38719e;
   --lime: #44d0d2;
-  --line: #c9e1e5;
+  --line: #d8d2c7;
   --shadow: 0 28px 70px rgba(56, 113, 158, .14);
 }
 
@@ -620,4 +620,24 @@ footer { padding: 48px clamp(24px, 8vw, 126px) 26px; color: white; background: v
   .hero-image { object-position: 54% center; }
   .hero-visual .photo-placeholder { padding: 26px 24px 110px; }
   .hero-visual .photo-placeholder strong { font-size: 38px; }
+}
+
+/* Warm Fisiofes palette and straight-edged visual language */
+.site-header { background: rgba(237,233,224,.94); }
+.hero-copy,
+.journey,
+.services,
+.community { background: var(--background); }
+.priority-offer,
+.assessment,
+.locations { background: var(--surface-soft); }
+.progress-console,
+.humanity-note,
+.assessment-visual,
+.assessment-panel,
+.brand-photo,
+.location-card,
+.community-quote,
+.booking-preview {
+  border-radius: 0;
 }
