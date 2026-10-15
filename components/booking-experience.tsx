@@ -1,50 +1,42 @@
 'use client'
 
-import { useMemo, useState } from 'react'
-import { ArrowLeft, ArrowRight, CalendarDays, Check, Clock, MessageCircle, ShieldCheck } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { CalendarDays, Check, Clock, ShieldCheck } from 'lucide-react'
 
-const services = [
-  { id: 'orientacion', name: 'No sé cuál elegir', detail: 'Te ayudamos a encontrar el mejor primer paso.' },
-  { id: 'fisioterapia', name: 'Fisioterapia', detail: 'Dolor, lesión, recuperación o postoperatorio.' },
-  { id: 'pilates', name: 'Pilates', detail: 'Movilidad, control y fuerza con acompañamiento.' },
-  { id: 'training', name: 'Entrenamiento funcional', detail: 'Fuerza y capacidad para la vida diaria.' },
-]
-
-const times = ['Temprano · 6–8 a.m.', 'Media mañana · 9–12 m.', 'Tarde · 4–7 p.m.', 'Quiero que me orienten']
+type Service = 'pilates' | 'training'
+type Slot = { id: string; date: string; time: string; service: Service; capacity: number; spotsRemaining: number; available: boolean; instructor: string | null }
 
 export function BookingExperience({ compact = false }: { compact?: boolean }) {
-  const [step, setStep] = useState(1)
-  const [service, setService] = useState('')
-  const [day, setDay] = useState('')
+  const [service, setService] = useState<Service>('pilates')
+  const [date, setDate] = useState('')
+  const [slots, setSlots] = useState<Slot[]>([])
   const [time, setTime] = useState('')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
-  const [goal, setGoal] = useState('')
-  const [error, setError] = useState('')
-  const selected = services.find(item => item.id === service)
-  const message = useMemo(() => encodeURIComponent(`Hola Fisiofes. Soy ${name}. Quiero solicitar ${selected?.name ?? 'orientación'} para ${day || 'una fecha por definir'} a las ${time || 'hora por definir'}. Mi objetivo es: ${goal || 'prefiero contarlo al equipo'}. Mi teléfono es ${phone}.`), [name, selected, day, time, goal, phone])
+  const [pin, setPin] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'saving' | 'done'>('idle')
+  const [message, setMessage] = useState('')
+  const [booking, setBooking] = useState<{ id: string; cancellationToken: string } | null>(null)
 
-  function advance() {
-    if (step === 1 && !service) return setError('Elige una opción para continuar.')
-    if (step === 2 && (!day || !time)) return setError('Selecciona una fecha y una hora preferida.')
-    if (step === 3 && (!name.trim() || !phone.trim())) return setError('Completa tu nombre y teléfono para continuar.')
-    setError('')
-    setStep(value => Math.min(4, value + 1))
+  useEffect(() => {
+    if (!date) { setSlots([]); return }
+    setStatus('loading'); setTime(''); setMessage('')
+    fetch(`/api/availability?date=${encodeURIComponent(date)}&service=${service}`)
+      .then(async response => { const result = await response.json(); if (!response.ok) throw new Error(result.error); setSlots(result.slots); setStatus('idle') })
+      .catch(error => { setMessage(error.message); setStatus('idle') })
+  }, [date, service])
+
+  async function reserve() {
+    if (!name.trim() || !phone.trim() || !pin || !date || !time) return setMessage('Completa tus datos y elige una clase disponible.')
+    setStatus('saving'); setMessage('')
+    const response = await fetch('/api/bookings', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ name, phone, pin, service, date, time }) })
+    const result = await response.json()
+    if (!response.ok) { setMessage(result.error); setStatus('idle'); return }
+    setBooking(result.booking); setMessage(`Reserva confirmada. Te quedan ${result.creditsRemaining} créditos.`); setStatus('done')
   }
 
-  return <div className={`booking-experience ${compact ? 'booking-compact' : ''}`}>
-    <div className="booking-progress" aria-label={`Paso ${step} de 4`}><span style={{ width: `${step * 25}%` }} /></div>
-    <div className="booking-meta"><span>PASO {step} DE 4</span><span>{step === 4 ? 'SOLICITUD LISTA' : 'TOMA MENOS DE 2 MINUTOS'}</span></div>
+  if (status === 'done' && booking) return <div className={`booking-experience ${compact ? 'booking-compact' : ''}`}><div className="booking-step booking-success"><span className="success-mark"><Check size={30} /></span><p className="eyebrow">RESERVA CONFIRMADA</p><h2>Tu cupo está listo.</h2><p>{service === 'pilates' ? 'Pilates' : 'Entrenamiento funcional'} · {date} · {time}</p><p>{message}</p><button className="button button-ghost" onClick={() => { setStatus('idle'); setTime(''); setBooking(null); setMessage('') }}>Reservar otra clase</button><a className="text-link" href={`/cancelar?token=${booking.cancellationToken}`}>Cancelar esta reserva</a></div></div>
 
-    {step === 1 && <div className="booking-step"><p className="eyebrow">EMPECEMOS POR TI</p><h2>¿Qué te gustaría trabajar?</h2><p className="step-lede">No tienes que saber el nombre exacto del servicio.</p><div className="booking-options">{services.map(item => <button type="button" className={service === item.id ? 'booking-option selected' : 'booking-option'} onClick={() => { setService(item.id); setError('') }} key={item.id}><span><strong>{item.name}</strong><small>{item.detail}</small></span>{service === item.id && <Check size={20} />}</button>)}</div></div>}
-
-    {step === 2 && <div className="booking-step"><p className="eyebrow">TU MOMENTO PREFERIDO</p><h2>¿Cuándo te queda mejor?</h2><label className="field"><span>Fecha preferida</span><div className="input-shell"><CalendarDays size={20} /><input type="date" value={day} onChange={event => setDay(event.target.value)} /></div></label><fieldset><legend>Franja preferida</legend><div className="time-options">{times.map(item => <button type="button" onClick={() => setTime(item)} className={time === item ? 'selected' : ''} key={item}><Clock size={17} />{item}</button>)}</div></fieldset><p className="helper">Revisamos los calendarios de clínica y Pilates/Training y te confirmamos el cupo personalmente.</p></div>}
-
-    {step === 3 && <div className="booking-step"><p className="eyebrow">PARA ACOMPAÑARTE</p><h2>¿Cómo podemos contactarte?</h2><div className="field-grid"><label className="field"><span>Nombre completo</span><input autoComplete="name" value={name} onChange={event => setName(event.target.value)} placeholder="Tu nombre" /></label><label className="field"><span>Teléfono o WhatsApp</span><input autoComplete="tel" inputMode="tel" value={phone} onChange={event => setPhone(event.target.value)} placeholder="Tu número" /></label></div><label className="field"><span>¿Qué quieres volver a hacer o mejorar?</span><textarea value={goal} onChange={event => setGoal(event.target.value)} placeholder="Por ejemplo: caminar con más confianza, aliviar el dolor de rodilla…" rows={4} /></label><p className="privacy-line"><ShieldCheck size={18} /> Solo usamos estos datos para orientarte y confirmar tu solicitud.</p></div>}
-
-    {step === 4 && <div className="booking-step booking-success"><span className="success-mark"><Check size={30} /></span><p className="eyebrow">TODO LISTO</p><h2>Ahora confírmalo con nuestro equipo.</h2><p>Prepararemos el mensaje con tu solicitud. Una persona de Fisiofes revisará disponibilidad y te responderá por WhatsApp.</p><div className="booking-summary"><span><small>Servicio</small><strong>{selected?.name}</strong></span><span><small>Preferencia</small><strong>{day} · {time}</strong></span></div><a className="button button-primary" href={`https://wa.me/?text=${message}`} target="_blank" rel="noreferrer"><MessageCircle size={20} /> Confirmar por WhatsApp</a></div>}
-
-    {error && <p className="form-error" role="alert">{error}</p>}
-    {step < 4 && <div className="booking-controls">{step > 1 ? <button type="button" className="button button-ghost" onClick={() => { setStep(value => value - 1); setError('') }}><ArrowLeft size={18} /> Atrás</button> : <span />}<button type="button" className="button button-primary" onClick={advance}>Continuar <ArrowRight size={18} /></button></div>}
-  </div>
+  const minDate = new Date().toISOString().slice(0, 10)
+  return <div className={`booking-experience ${compact ? 'booking-compact' : ''}`}><div className="booking-step"><p className="eyebrow">AGENDA EN TIEMPO REAL</p><h2>Reserva tu próxima clase</h2><div className="booking-options"><button type="button" className={service === 'pilates' ? 'booking-option selected' : 'booking-option'} onClick={() => setService('pilates')}><span><strong>Pilates</strong><small>Hasta 5 personas por clase.</small></span></button><button type="button" className={service === 'training' ? 'booking-option selected' : 'booking-option'} onClick={() => setService('training')}><span><strong>Entrenamiento funcional</strong><small>Hasta 4 personas por clase.</small></span></button></div><label className="field"><span>Fecha</span><div className="input-shell"><CalendarDays size={20} /><input type="date" min={minDate} value={date} onChange={event => setDate(event.target.value)} /></div></label>{status === 'loading' && <p>Consultando cupos…</p>}{date && status !== 'loading' && !slots.length && <p>No hay clases disponibles este día.</p>}<div className="time-options">{slots.map(slot => <button type="button" disabled={!slot.available} onClick={() => setTime(slot.time)} className={time === slot.time ? 'selected' : ''} key={slot.id}><Clock size={17} />{slot.time} · {slot.available ? `${slot.spotsRemaining} cupos` : 'Lleno'}</button>)}</div><div className="field-grid"><label className="field"><span>Nombre completo</span><input autoComplete="name" value={name} onChange={event => setName(event.target.value)} /></label><label className="field"><span>WhatsApp</span><input autoComplete="tel" inputMode="tel" value={phone} onChange={event => setPhone(event.target.value)} /></label><label className="field"><span>PIN de Fisiofes</span><input type="password" inputMode="numeric" pattern="[0-9]{4,8}" value={pin} onChange={event => setPin(event.target.value)} /></label></div><p className="privacy-line"><ShieldCheck size={18} /> Solo se confirma si tienes un crédito activo. Nunca se descuenta más de uno.</p><button type="button" className="button button-primary" onClick={reserve} disabled={status === 'saving'}>{status === 'saving' ? 'Confirmando…' : 'Confirmar reserva'}</button>{message && <p className="form-error" role="alert">{message}</p>}</div></div>
 }

@@ -1,4 +1,3 @@
-import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { QuickAccess } from '@/components/quick-access'
@@ -14,5 +13,5 @@ export const metadata: Metadata = {
 export const viewport: Viewport = { colorScheme: 'light', themeColor: '#44D0D2', width: 'device-width', initialScale: 1 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="es" className="bg-background"><body>{children}<QuickAccess />{process.env.NODE_ENV === 'production' && <Analytics />}</body></html>
+  return <html lang="es" className="bg-background"><body>{children}<QuickAccess /></body></html>
 }
