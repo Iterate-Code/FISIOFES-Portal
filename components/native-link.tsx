@@ -10,5 +10,9 @@ type NativeLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> & {
  * next/link client-side router while preserving the existing Link call sites.
  */
 export default function NativeLink({ href, children, ...props }: NativeLinkProps) {
-  return <a href={href} {...props}>{children}</a>
+  return (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  )
 }

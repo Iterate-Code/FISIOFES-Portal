@@ -1,2 +1,27 @@
 import { ServicePage } from '@/components/service-page'
-export default function Page() { return <ServicePage eyebrow="RECUPERACIÓN CLÍNICA" title={<>Fisioterapia para volver a moverte <em>sin miedo.</em></>} intro="Evaluación y tratamiento personalizado para disminuir dolor, recuperar función y volver a hacer lo que importa." price="$60.000" duration="45–60 min" bullets={['Valoración clínica y funcional', 'Tratamiento manual y ejercicio terapéutico', 'Plan de trabajo para casa', 'Seguimiento y ajustes con tu equipo']}><p>Trabajamos contigo, no sobre ti. Cada sesión combina criterio clínico, educación y movimiento para que entiendas tu proceso y recuperes confianza.</p></ServicePage> }
+export default function Page() {
+  return (
+    <ServicePage
+      eyebrow="RECUPERACIÓN CLÍNICA"
+      title={
+        <>
+          Fisioterapia para volver a moverte <em>sin miedo.</em>
+        </>
+      }
+      intro="Evaluación y tratamiento personalizado para disminuir dolor, recuperar función y volver a hacer lo que importa."
+      price="$60.000"
+      duration="45–60 min"
+      bullets={[
+        'Valoración clínica y funcional',
+        'Tratamiento manual y ejercicio terapéutico',
+        'Plan de trabajo para casa',
+        'Seguimiento y ajustes con tu equipo',
+      ]}
+    >
+      <p>
+        Trabajamos contigo, no sobre ti. Cada sesión combina criterio clínico, educación y
+        movimiento para que entiendas tu proceso y recuperes confianza.
+      </p>
+    </ServicePage>
+  )
+}
