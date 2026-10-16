@@ -1,5 +1,6 @@
 import Link from '@/components/native-link'
 import Image from 'next/image'
+import { CATALOG, formatCop, getCategory, startingPriceCop } from '@/lib/catalog'
 import {
   Activity,
   ArrowRight,
@@ -51,24 +52,7 @@ const process = [
     icon: TrendingUp,
   },
 ]
-const services = [
-  [
-    'Fisioterapia',
-    'Recuperación clínica para volver a moverte con confianza.',
-    '/servicios/fisioterapia',
-  ],
-  ['Pilates', 'Fuerza, control y movilidad en grupos reducidos.', '/servicios/pilates'],
-  [
-    'Entrenamiento',
-    'Capacidad física útil para tu vida y tus retos.',
-    '/servicios/entrenamiento-funcional',
-  ],
-  [
-    'Valoración funcional',
-    'Datos claros para empezar y avanzar con seguridad.',
-    '/servicios/valoracion-funcional-longevidad',
-  ],
-]
+const services = CATALOG.map(({ title, description, href }) => [title, description, href])
 
 function Header() {
   return (
@@ -83,7 +67,7 @@ function Header() {
       </nav>
       <div className="header-actions">
         <Link href="/precios" className="header-link">
-          Planes y precios
+          Servicios y planes
         </Link>
         <Link href="/ingresar" className="header-link">
           Ingresar
@@ -98,7 +82,7 @@ function Header() {
           <X className="close-icon" />
         </summary>
         <div className="mobile-menu-panel">
-          <Link href="/precios">Planes y precios</Link>
+          <Link href="/precios">Servicios y planes</Link>
           <Link href="/contacto">Reservar</Link>
           <Link href="/ingresar">Ingresar</Link>
           <Link href="/servicios">Servicios</Link>
@@ -132,7 +116,7 @@ export default function Home() {
           </p>
           <div className="hero-actions">
             <Link href="/precios" className="button button-primary">
-              Ver planes y precios <ArrowRight size={19} />
+              Ver servicios y planes <ArrowRight size={19} />
             </Link>
             <Link href={contact} className="button button-ghost">
               Reservar mi primera visita <ArrowRight size={18} />
@@ -221,7 +205,7 @@ export default function Home() {
             </h2>
           </div>
           <Link href="/precios" className="text-link">
-            Ver todos los precios <ArrowRight size={17} />
+            Ver todos los servicios <ArrowRight size={17} />
           </Link>
         </div>
         <div className="priority-grid">
@@ -230,7 +214,8 @@ export default function Home() {
             <h3>Valoración osteomuscular</h3>
             <p>Entendemos tu dolor, movimiento y punto de partida.</p>
             <strong>
-              $60.000 <small>· 40 min</small>
+              Desde {formatCop(startingPriceCop(getCategory('fisioterapia'))!)}{' '}
+              <small>· 40 min</small>
             </strong>
             <span className="route-cta">
               Conocer la valoración <ArrowRight />
@@ -241,21 +226,22 @@ export default function Home() {
             <h3>Primera clase de Pilates</h3>
             <p>Prueba una sesión guiada en grupo reducido.</p>
             <strong>
-              $40.000 <small>· 50 min</small>
+              Desde {formatCop(startingPriceCop(getCategory('pilates'))!)} <small>· 50 min</small>
             </strong>
             <span className="route-cta">
               Ver Pilates <ArrowRight />
             </span>
           </Link>
-          <Link href="/precios" className="priority-card">
-            <span className="priority-badge">PLAN MENSUAL</span>
-            <h3>12 clases de Pilates</h3>
-            <p>Continuidad y acompañamiento durante el mes.</p>
+          <Link href="/servicios/entrenamiento-funcional" className="priority-card">
+            <span className="priority-badge">FUERZA</span>
+            <h3>Entrenamiento funcional</h3>
+            <p>Fuerza y equilibrio para tu vida diaria, con paquetes mensuales.</p>
             <strong>
-              $450.000 <small>· $37.500/clase</small>
+              Desde {formatCop(startingPriceCop(getCategory('entrenamiento-funcional'))!)}{' '}
+              <small>· 50 min</small>
             </strong>
             <span className="route-cta">
-              Comparar paquetes <ArrowRight />
+              Ver entrenamiento <ArrowRight />
             </span>
           </Link>
         </div>
@@ -454,7 +440,7 @@ export default function Home() {
         <div className="service-list">
           {services.map(([title, body, href], index) => (
             <Link href={href} className="service-row" key={title}>
-              <span>0{index + 1}</span>
+              <span>{String(index + 1).padStart(2, '0')}</span>
               <h3>{title}</h3>
               <p>{body}</p>
               <ArrowUpRight />
@@ -758,7 +744,7 @@ export default function Home() {
           <span>© 2026 Fisiofes Physio, Pilates & Training</span>
           <div>
             <Link href="/servicios">Servicios</Link>
-            <Link href="/precios">Precios</Link>
+            <Link href="/precios">Planes</Link>
             <Link href="/contacto">Reserva</Link>
             <Link href="#sedes">Sede y horarios</Link>
           </div>

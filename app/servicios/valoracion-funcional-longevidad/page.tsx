@@ -9,7 +9,7 @@ export default function Page() {
         </>
       }
       intro="Datos claros para saber dónde estás, qué priorizar y cómo medir tu progreso."
-      price="Por confirmar"
+      categorySlug="valoracion-funcional-longevidad"
       duration="60–75 min"
       bullets={[
         'Composición corporal con InBody',
