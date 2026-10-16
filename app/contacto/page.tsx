@@ -1,5 +1,5 @@
 import Link from '@/components/native-link'
-import { ArrowLeft, Clock, MapPin } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Clock, MapPin } from 'lucide-react'
 import { BookingExperience } from '@/components/booking-experience'
 
 export const metadata = { title: 'Reservar' }
@@ -40,6 +40,9 @@ export default function ContactoPage() {
               </span>
             </span>
           </div>
+          <Link href="/prevaloracion" className="text-link">
+            ¿Primera vez? Haz la pre-valoración (2 minutos) <ArrowRight size={17} />
+          </Link>
         </aside>
         <BookingExperience />
       </section>

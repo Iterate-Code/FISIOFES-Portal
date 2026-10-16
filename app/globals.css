@@ -2939,3 +2939,178 @@ footer {
   margin-top: 3px;
   color: var(--aqua-dark);
 }
+
+/* Fase 2: pre-valoración. Pensado para adulto mayor: texto >= 18px, objetivos >= 56px. */
+.prescreen-page {
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+.prescreen-intro,
+.prescreen-card {
+  width: min(720px, calc(100% - 32px));
+  margin: 0 auto;
+}
+.prescreen-intro {
+  padding: 32px 0 8px;
+}
+.prescreen-lede {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.5;
+}
+.prescreen-card {
+  display: grid;
+  gap: 20px;
+  padding: 32px 28px;
+  margin-top: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 18px;
+  line-height: 1.5;
+}
+.prescreen-card .eyebrow {
+  margin: 0;
+  font-size: 16px;
+}
+.prescreen-title {
+  margin: 0;
+  font-size: clamp(28px, 5vw, 38px);
+  line-height: 1.2;
+}
+.prescreen-title:focus {
+  outline: none;
+}
+.prescreen-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 18px;
+}
+.prescreen-progress {
+  height: 10px;
+  overflow: hidden;
+  background: var(--line);
+  border-radius: 999px;
+}
+.prescreen-progress span {
+  display: block;
+  height: 100%;
+  background: var(--aqua-dark);
+  transition: width 0.3s ease;
+}
+.prescreen-options {
+  display: grid;
+  gap: 12px;
+}
+.prescreen-option {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  color: var(--ink);
+  text-align: left;
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  font-size: 20px;
+  cursor: pointer;
+}
+.prescreen-option small {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 17px;
+}
+.prescreen-option.selected {
+  border-color: var(--aqua-dark);
+  background: var(--surface-soft);
+}
+.prescreen-option svg {
+  flex: 0 0 auto;
+  color: var(--aqua-dark);
+}
+.prescreen-pain {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+.prescreen-pain button {
+  min-height: 60px;
+  color: var(--ink);
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.prescreen-pain button.selected {
+  color: white;
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.prescreen-contact {
+  display: grid;
+  gap: 4px;
+}
+.prescreen-contact .field {
+  font-size: 18px;
+}
+.prescreen-contact input:not([type='checkbox']) {
+  min-height: 60px;
+  font-size: 20px;
+}
+.prescreen-consent {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-top: 20px;
+  font-size: 18px;
+}
+.prescreen-consent input {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  margin-top: 2px;
+}
+.prescreen-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+.prescreen-actions .button {
+  min-height: 60px;
+  font-size: 19px;
+}
+.prescreen-actions .button-primary {
+  margin-left: auto;
+}
+.prescreen-reco {
+  display: grid;
+  gap: 6px;
+  padding: 20px;
+  background: var(--surface-soft);
+  border-left: 4px solid var(--aqua-dark);
+}
+.prescreen-reco strong {
+  font-size: 24px;
+}
+.prescreen-reco small {
+  color: var(--aqua-dark);
+  font-size: 18px;
+  font-weight: 700;
+}
+@media (max-width: 480px) {
+  .prescreen-card {
+    padding: 24px 18px;
+  }
+  .prescreen-pain {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .prescreen-actions .button {
+    flex: 1 1 100%;
+  }
+}
