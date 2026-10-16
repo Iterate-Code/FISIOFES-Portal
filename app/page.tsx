@@ -556,6 +556,9 @@ export default function Home() {
           <Link href={contact} className="button button-primary">
             Comenzar mi reserva <ArrowRight size={19} />
           </Link>
+          <Link href="/prevaloracion" className="text-link">
+            ¿No sabes por dónde empezar? Haz la pre-valoración <ArrowRight size={17} />
+          </Link>
         </div>
         <div className="booking-preview" aria-hidden="true">
           <span className="preview-label">RESERVA FISIOFES</span>

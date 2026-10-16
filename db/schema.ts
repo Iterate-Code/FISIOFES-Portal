@@ -59,3 +59,20 @@ export const bookings = sqliteTable(
   },
   (table) => [uniqueIndex('bookings_client_slot_unique').on(table.clientId, table.slotId)],
 )
+
+export const prescreenings = sqliteTable('prescreenings', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  phone: text('phone').notNull(),
+  // JSON of the validated answers; see lib/prescreening.ts.
+  answers: text('answers').notNull(),
+  route: text('route', { enum: ['llamada', 'recomendacion'] }).notNull(),
+  redFlags: text('red_flags').notNull().default('[]'),
+  recommendedSlug: text('recommended_slug').notNull(),
+  questionnaireVersion: integer('questionnaire_version').notNull(),
+  consentAt: text('consent_at').notNull(),
+  contacted: integer('contacted', { mode: 'boolean' }).notNull().default(false),
+  createdAt: text('created_at')
+    .notNull()
+    .default(sql`CURRENT_TIMESTAMP`),
+})
