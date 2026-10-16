@@ -1,0 +1,11 @@
+build/
+out/
+vendor/
+dist/
+.next/
+node_modules/
+scripts/
+drizzle/
+components/ui/
+pnpm-lock.yaml
+package-lock.json
