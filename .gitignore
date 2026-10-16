@@ -56,3 +56,5 @@ next-env.d.ts
 /work/
 /.sites-package/
 /fisiofes-sites.tar.gz
+
+*.tsbuildinfo
