@@ -1,12 +1,13 @@
 import Link from '@/components/native-link'
 import { ArrowRight, Check, Clock, MapPin } from 'lucide-react'
 import { ReactNode } from 'react'
+import { formatCop, getCategory, startingPriceCop } from '@/lib/catalog'
 
 export function ServicePage({
   eyebrow,
   title,
   intro,
-  price,
+  categorySlug,
   duration,
   bullets,
   children,
@@ -14,11 +15,13 @@ export function ServicePage({
   eyebrow: string
   title: ReactNode
   intro: string
-  price: string
+  categorySlug: string
   duration: string
   bullets: string[]
   children: ReactNode
 }) {
+  const category = getCategory(categorySlug)
+  const from = startingPriceCop(category)
   return (
     <main>
       <header className="member-header">
@@ -39,8 +42,8 @@ export function ServicePage({
           </Link>
         </div>
         <div className="service-summary">
-          <span className="summary-label">DESDE</span>
-          <strong>{price}</strong>
+          <span className="summary-label">{from === null ? 'TARIFA' : 'DESDE'}</span>
+          <strong>{from === null ? 'A consultar' : formatCop(from)}</strong>
           <span>
             <Clock size={16} /> {duration}
           </span>
@@ -67,7 +70,7 @@ export function ServicePage({
         <div className="detail-copy">
           {children}
           <Link href="/precios" className="text-link">
-            Ver paquetes y precios <ArrowRight size={17} />
+            Ver todos los servicios y planes <ArrowRight size={17} />
           </Link>
         </div>
       </section>

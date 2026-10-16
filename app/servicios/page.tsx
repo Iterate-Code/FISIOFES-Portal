@@ -1,27 +1,9 @@
 import Link from '@/components/native-link'
 import { ArrowUpRight } from 'lucide-react'
+import { CATALOG } from '@/lib/catalog'
 
-const services = [
-  [
-    '01',
-    'Valoración funcional y longevidad',
-    'El punto de partida para entender tu cuerpo y diseñar una ruta segura.',
-    '/servicios/valoracion-funcional-longevidad',
-  ],
-  [
-    '02',
-    'Fisioterapia',
-    'Recupera función, reduce dolor y vuelve a moverte con confianza.',
-    '/servicios/fisioterapia',
-  ],
-  ['03', 'Pilates', 'Control, fuerza y movilidad en grupos reducidos.', '/servicios/pilates'],
-  [
-    '04',
-    'Entrenamiento funcional',
-    'Capacidad física útil para tu vida, tus retos y tu futuro.',
-    '/servicios/entrenamiento-funcional',
-  ],
-]
+export const metadata = { title: 'Servicios' }
+
 export default function ServiciosPage() {
   return (
     <main>
@@ -29,8 +11,8 @@ export default function ServiciosPage() {
         <Link href="/" className="brand-lockup">
           <img src="/fisiofes-logo.svg" alt="FisioFES" />
         </Link>
-        <Link href="/#agendamiento" className="button button-dark">
-          Agendar valoración
+        <Link href="/contacto" className="button button-dark">
+          Reservar ahora
         </Link>
       </header>
       <section className="inner-hero">
@@ -40,23 +22,23 @@ export default function ServiciosPage() {
             Todo conectado a <em>tu objetivo.</em>
           </h1>
           <p>
-            Empieza por donde estés. Nosotros conectamos el cuidado clínico, el movimiento y la
+            Empieza por donde estés. Conectamos el cuidado clínico, el movimiento, el bienestar y la
             fuerza en una sola ruta.
           </p>
-          <Link href="/#agendamiento" className="button button-primary">
-            Encontrar mi ruta
+          <Link href="/precios" className="button button-primary">
+            Ver servicios y planes
           </Link>
         </div>
       </section>
       <section className="service-index section">
         <p className="eyebrow">ELIGE TU PUNTO DE PARTIDA</p>
         <div className="service-index-list">
-          {services.map(([number, title, body, href]) => (
-            <Link href={href} className="service-index-row" key={title}>
-              <span>{number}</span>
+          {CATALOG.map(({ slug, title, description, href }, index) => (
+            <Link href={href} className="service-index-row" key={slug}>
+              <span>{String(index + 1).padStart(2, '0')}</span>
               <div>
                 <h2>{title}</h2>
-                <p>{body}</p>
+                <p>{description}</p>
               </div>
               <ArrowUpRight />
             </Link>

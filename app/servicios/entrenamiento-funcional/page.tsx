@@ -9,7 +9,7 @@ export default function Page() {
         </>
       }
       intro="Construye capacidad, equilibrio y potencia para moverte con más libertad hoy y en el futuro."
-      price="$40.000"
+      categorySlug="entrenamiento-funcional"
       duration="50 min"
       bullets={[
         'Entrenamiento adaptado a tu punto de partida',

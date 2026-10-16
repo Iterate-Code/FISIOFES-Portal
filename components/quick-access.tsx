@@ -6,7 +6,7 @@ export function QuickAccess() {
     <nav className="quick-access" aria-label="Accesos rápidos">
       <Link href="/precios">
         <Tags size={20} />
-        <span>Precios</span>
+        <span>Planes</span>
       </Link>
       <Link href="/contacto" className="quick-primary">
         <CalendarDays size={20} />

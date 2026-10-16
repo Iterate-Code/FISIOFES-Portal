@@ -2913,3 +2913,29 @@ footer {
     padding-right: 24px;
   }
 }
+
+/* Fase 1: catálogo sin precios exactos */
+.pricing-card > p:not(.eyebrow) {
+  margin-bottom: 24px;
+  font-size: 17px;
+  line-height: 1.5;
+}
+.pricing-notes {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  margin: 24px 0 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: 17px;
+}
+.pricing-notes li {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+}
+.pricing-notes li svg {
+  flex: 0 0 auto;
+  margin-top: 3px;
+  color: var(--aqua-dark);
+}

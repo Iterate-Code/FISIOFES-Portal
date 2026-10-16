@@ -9,10 +9,10 @@ export default function Page() {
         </>
       }
       intro="Sesiones guiadas en grupos reducidos para mejorar control, movilidad y fuerza a cualquier edad."
-      price="$40.000"
+      categorySlug="pilates"
       duration="50 min"
       bullets={[
-        'Primera clase a $40.000',
+        'Primera clase como oferta de entrada',
         'Grupos reducidos y atención cercana',
         'Ejercicios adaptados a tu nivel',
         'Progresión medible y segura',

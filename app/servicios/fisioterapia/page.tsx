@@ -9,7 +9,7 @@ export default function Page() {
         </>
       }
       intro="Evaluación y tratamiento personalizado para disminuir dolor, recuperar función y volver a hacer lo que importa."
-      price="$60.000"
+      categorySlug="fisioterapia"
       duration="45–60 min"
       bullets={[
         'Valoración clínica y funcional',
