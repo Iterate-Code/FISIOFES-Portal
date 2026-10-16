@@ -58,3 +58,6 @@ next-env.d.ts
 /fisiofes-sites.tar.gz
 
 *.tsbuildinfo
+
+# local Cloudflare secrets
+.dev.vars*

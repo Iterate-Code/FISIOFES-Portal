@@ -15,6 +15,13 @@
       "when": 1792177703788,
       "tag": "0001_brief_hercules",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1792178098289,
+      "tag": "0002_early_anita_blake",
+      "breakpoints": true
     }
   ]
 }

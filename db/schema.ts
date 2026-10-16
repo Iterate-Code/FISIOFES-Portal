@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm'
-import { integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core'
+import { index, integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core'
 
 export const clients = sqliteTable('clients', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -14,6 +14,8 @@ export const clients = sqliteTable('clients', {
   creditsRemaining: integer('credits_remaining').notNull().default(0),
   planExpiresAt: text('plan_expires_at').notNull().default('1970-01-01'),
   active: integer('active', { mode: 'boolean' }).notNull().default(true),
+  // Set when the person accepts data processing at registration (Ley 1581 de 2012).
+  consentAt: text('consent_at'),
   createdAt: text('created_at')
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
@@ -75,4 +77,29 @@ export const prescreenings = sqliteTable('prescreenings', {
   createdAt: text('created_at')
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
+})
+
+export const otpCodes = sqliteTable(
+  'otp_codes',
+  {
+    id: text('id').primaryKey(),
+    phone: text('phone').notNull(),
+    // Keyed HMAC of the code (lib/auth.ts); the code itself is never stored.
+    codeHash: text('code_hash').notNull(),
+    expiresAt: text('expires_at').notNull(),
+    attempts: integer('attempts').notNull().default(0),
+    consumed: integer('consumed', { mode: 'boolean' }).notNull().default(false),
+    createdAt: text('created_at').notNull(),
+  },
+  (table) => [index('otp_codes_phone_created_idx').on(table.phone, table.createdAt)],
+)
+
+export const sessions = sqliteTable('sessions', {
+  // SHA-256 of the cookie token; the raw token only exists in the browser.
+  tokenHash: text('token_hash').primaryKey(),
+  clientId: integer('client_id')
+    .notNull()
+    .references(() => clients.id),
+  expiresAt: text('expires_at').notNull(),
+  createdAt: text('created_at').notNull(),
 })
