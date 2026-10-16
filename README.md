@@ -36,6 +36,10 @@ Formato: Prettier (`.prettierrc.json`). Ejecuta `npx prettier --write <archivos>
 ## Variables de entorno
 
 - `FISIOFES_ADMIN_EMAIL`: correo con acceso a `/admin` y `/api/admin/*`.
+- `AUTH_SECRET`: clave larga y aleatoria para firmar los códigos de ingreso. Obligatoria; sin ella el ingreso responde 503.
+- `OTP_WEBHOOK_URL` y `OTP_WEBHOOK_SECRET`: webhook (n8n / WhatsApp) que recibe `{ phone, code, message }` y envía el mensaje. Sin `OTP_WEBHOOK_URL` el ingreso solo funciona en desarrollo, mostrando el código en pantalla.
+
+En local, crea un archivo `.dev.vars` (ignorado por git) con `AUTH_SECRET=...`.
 
 Nunca subas secretos al repositorio.
 

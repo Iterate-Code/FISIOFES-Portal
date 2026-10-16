@@ -1,100 +1,194 @@
 'use client'
 
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 import Link from '@/components/native-link'
-import { ArrowRight, CalendarDays, Check, LockKeyhole, Users } from 'lucide-react'
+import { ArrowRight, LockKeyhole } from 'lucide-react'
+
+type Step = 'phone' | 'code' | 'profile'
+
+async function postJson<T>(url: string, body: unknown): Promise<{ ok: boolean; data: T }> {
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+  const data = (await response.json().catch(() => ({}))) as T
+  return { ok: response.ok, data }
+}
 
 export function LoginExperience() {
-  const [role, setRole] = useState<'patient' | 'team'>('patient')
-  const [identifier, setIdentifier] = useState('')
+  const [step, setStep] = useState<Step>('phone')
+  const [phone, setPhone] = useState('')
+  const [code, setCode] = useState('')
+  const [name, setName] = useState('')
+  const [consent, setConsent] = useState(false)
   const [error, setError] = useState('')
-  const [submitted, setSubmitted] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [devCode, setDevCode] = useState('')
+  const heading = useRef<HTMLHeadingElement>(null)
 
-  function submit(event: FormEvent) {
-    event.preventDefault()
-    if (!identifier.trim()) return setError('Escribe tu correo o número de WhatsApp.')
+  useEffect(() => {
+    heading.current?.focus()
+  }, [step])
+
+  async function requestCode(event?: FormEvent) {
+    event?.preventDefault()
+    if (!phone.trim()) return setError('Escribe tu número de WhatsApp.')
+    setBusy(true)
     setError('')
-    setSubmitted(true)
+    const { ok, data } = await postJson<{ error?: string; devCode?: string }>(
+      '/api/auth/request-code',
+      { phone },
+    )
+    setBusy(false)
+    if (!ok) return setError(data.error ?? 'No pudimos enviar el código.')
+    setDevCode(data.devCode ?? '')
+    setCode('')
+    setStep('code')
   }
 
-  if (submitted)
-    return (
-      <section className="login-card login-result">
-        <span className="success-mark">
-          <Check size={28} />
-        </span>
-        <p className="eyebrow">VISTA DE DEMOSTRACIÓN</p>
-        <h1>Tu espacio está preparado.</h1>
-        <p>
-          El siguiente paso técnico es conectar este acceso con la base de pacientes y permisos del
-          equipo. Por seguridad, esta versión pública no consulta historias ni citas reales.
-        </p>
-        <div className="login-next">
-          <Link href="/contacto" className="button button-primary">
-            <CalendarDays size={19} /> Reservar una sesión
-          </Link>
-          <button type="button" className="button button-ghost" onClick={() => setSubmitted(false)}>
-            Volver
-          </button>
-        </div>
-      </section>
+  async function verify(event: FormEvent) {
+    event.preventDefault()
+    if (!code.trim()) return setError('Escribe el código que te enviamos.')
+    if (step === 'profile' && (!name.trim() || !consent)) {
+      return setError('Escribe tu nombre y acepta el uso de tus datos para continuar.')
+    }
+    setBusy(true)
+    setError('')
+    const { ok, data } = await postJson<{ error?: string; needsProfile?: boolean }>(
+      '/api/auth/verify',
+      { phone, code, ...(step === 'profile' ? { name, consent } : {}) },
     )
+    setBusy(false)
+    if (!ok) return setError(data.error ?? 'No pudimos verificar el código.')
+    if (data.needsProfile) {
+      setStep('profile')
+      return
+    }
+    window.location.assign('/mi-fisiofes')
+  }
 
   return (
     <section className="login-card">
       <p className="eyebrow">MI FISIOFES</p>
-      <h1>Bienvenido de nuevo.</h1>
-      <p className="login-lede">Consulta tus citas, plan y progreso desde un solo lugar.</p>
-      <div className="role-switch" aria-label="Tipo de acceso">
-        {' '}
-        <button
-          type="button"
-          className={role === 'patient' ? 'selected' : ''}
-          onClick={() => setRole('patient')}
-        >
-          <CalendarDays size={20} />
-          <span>
-            <strong>Soy paciente</strong>
-            <small>Citas y plan</small>
-          </span>
-        </button>
-        <button
-          type="button"
-          className={role === 'team' ? 'selected' : ''}
-          onClick={() => setRole('team')}
-        >
-          <Users size={20} />
-          <span>
-            <strong>Soy del equipo</strong>
-            <small>Agenda y atención</small>
-          </span>
-        </button>
-      </div>
-      <form onSubmit={submit}>
-        <label className="field">
-          <span>Correo o número de WhatsApp</span>
-          <input
-            value={identifier}
-            onChange={(event) => setIdentifier(event.target.value)}
-            autoComplete="username"
-            placeholder={role === 'patient' ? 'Tu correo o celular' : 'Correo institucional'}
-          />
-        </label>
-        {error && (
-          <p className="form-error" role="alert">
-            {error}
+      {step === 'phone' && (
+        <form onSubmit={requestCode}>
+          <h1 ref={heading} tabIndex={-1}>
+            Ingresa o crea tu cuenta.
+          </h1>
+          <p className="login-lede">
+            Escribe tu número de WhatsApp. Te enviaremos un código de 6 dígitos. No necesitas
+            contraseña.
           </p>
-        )}
-        <button className="button button-primary" type="submit">
-          Continuar de forma segura <ArrowRight size={18} />
-        </button>
-      </form>
+          <label className="field">
+            <span>Tu número de WhatsApp</span>
+            <input
+              autoComplete="tel"
+              inputMode="tel"
+              value={phone}
+              onChange={(event) => setPhone(event.target.value)}
+              placeholder="310 555 0123"
+            />
+          </label>
+          {error && (
+            <p className="form-error" role="alert">
+              {error}
+            </p>
+          )}
+          <button className="button button-primary" type="submit" disabled={busy}>
+            {busy ? 'Enviando…' : 'Enviarme el código'} <ArrowRight size={20} />
+          </button>
+        </form>
+      )}
+
+      {step !== 'phone' && (
+        <form onSubmit={verify}>
+          <h1 ref={heading} tabIndex={-1}>
+            {step === 'code' ? 'Escribe tu código.' : 'Un último paso.'}
+          </h1>
+          <p className="login-lede">
+            {step === 'code'
+              ? `Te enviamos un código por WhatsApp al ${phone}.`
+              : 'Es tu primera vez. Cuéntanos tu nombre para crear tu cuenta.'}
+          </p>
+          {devCode && (
+            <p className="login-lede">
+              <strong>Solo en desarrollo:</strong> {devCode}
+            </p>
+          )}
+          <label className="field">
+            <span>Código de 6 dígitos</span>
+            <input
+              autoComplete="one-time-code"
+              inputMode="numeric"
+              value={code}
+              onChange={(event) => setCode(event.target.value)}
+              disabled={step === 'profile'}
+            />
+          </label>
+          {step === 'profile' && (
+            <>
+              <label className="field">
+                <span>Tu nombre completo</span>
+                <input
+                  autoComplete="name"
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
+                />
+              </label>
+              <label className="prescreen-consent">
+                <input
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(event) => setConsent(event.target.checked)}
+                />
+                <span>
+                  Autorizo a Fisiofes a guardar y usar mis datos personales y de salud para
+                  gestionar mis citas y mi atención. Puedo pedir que los borren cuando quiera.
+                </span>
+              </label>
+            </>
+          )}
+          {error && (
+            <p className="form-error" role="alert">
+              {error}
+            </p>
+          )}
+          <button className="button button-primary" type="submit" disabled={busy}>
+            {busy ? 'Verificando…' : step === 'code' ? 'Entrar' : 'Crear mi cuenta'}{' '}
+            <ArrowRight size={20} />
+          </button>
+          <button
+            type="button"
+            className="text-link login-link-button"
+            onClick={() => {
+              setStep('phone')
+              setError('')
+            }}
+          >
+            Cambiar mi número
+          </button>
+          {step === 'code' && (
+            <button
+              type="button"
+              className="text-link login-link-button"
+              onClick={() => requestCode()}
+              disabled={busy}
+            >
+              No me llegó. Enviar otro código
+            </button>
+          )}
+        </form>
+      )}
+
       <p className="login-security">
-        <LockKeyhole size={17} /> Cuando se conecte la autenticación, enviaremos un código de
-        acceso. No necesitarás recordar una contraseña.
+        <LockKeyhole size={20} /> Tu código vence en 10 minutos y sirve una sola vez.
       </p>
-      <Link href="/contacto" className="text-link">
-        ¿Es tu primera vez? Reserva aquí <ArrowRight size={16} />
+      <Link href="/prevaloracion" className="text-link">
+        ¿Primera vez? Haz la pre-valoración <ArrowRight size={18} />
+      </Link>
+      <Link href="/admin" className="text-link">
+        Acceso del equipo
       </Link>
     </section>
   )
