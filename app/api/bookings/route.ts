@@ -1,7 +1,7 @@
 import { and, eq, gt, gte, or, sql } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { bookings, classSlots, clients } from "../../../db/schema";
-import { canUseCredit, getDailySlots, normalizePhone, slotStart, type Service } from "../../../lib/booking-rules";
+import { canUseCredit, getDailySlots, isValidPhone, normalizePhone, slotStart, type Service } from "../../../lib/booking-rules";
 import { jsonError } from "../../../lib/api";
 import { verifyPin } from "../../../lib/security";
 
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
   const date = payload.date ?? "";
   const time = payload.time ?? "";
   const slot = ["pilates", "training"].includes(service) ? getDailySlots(date, service).find((item) => item.time === time) : undefined;
-  if (!name || !/^\+57\d{10}$/.test(phone) || !slot) return jsonError("Datos de reserva inválidos.");
+  if (!name || !isValidPhone(phone) || !slot) return jsonError("Datos de reserva inválidos.");
   if (slotStart(date, time).getTime() <= Date.now()) return jsonError("Selecciona una clase futura.");
 
   const db = getDb();

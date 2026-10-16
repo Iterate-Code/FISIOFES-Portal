@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   canUseCredit,
   getDailySlots,
+  isValidPhone,
   normalizePhone,
   validateCancellation,
 } from "./booking-rules.ts";
@@ -10,6 +11,13 @@ import {
 test("normalizes Colombian phone numbers", () => {
   assert.equal(normalizePhone("302 548 6279"), "+573025486279");
   assert.equal(normalizePhone("+57 302-548-6279"), "+573025486279");
+});
+
+test("accepts valid international E.164 phone numbers", () => {
+  assert.equal(normalizePhone("+1 (437) 262-9813"), "+14372629813");
+  assert.equal(isValidPhone("+14372629813"), true);
+  assert.equal(isValidPhone("+573001234567"), true);
+  assert.equal(isValidPhone("123"), false);
 });
 
 test("publishes weekday and Saturday operating hours", () => {

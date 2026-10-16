@@ -29,6 +29,10 @@ export function normalizePhone(value: string): string {
   return value.trim().startsWith("+") ? `+${digits}` : digits;
 }
 
+export function isValidPhone(value: string): boolean {
+  return /^\+[1-9]\d{7,14}$/.test(value);
+}
+
 export function getDailySlots(date: string, service: Service): SlotDefinition[] {
   const day = new Date(`${date}T12:00:00-05:00`).getDay();
   const times = day === 0 ? [] : day === 6 ? SATURDAY_TIMES : WEEKDAY_TIMES;
