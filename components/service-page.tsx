@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/native-link'
 import { ArrowRight, Check, Clock, MapPin } from 'lucide-react'
 import { ReactNode } from 'react'
 

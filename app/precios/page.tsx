@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/native-link'
 import { ArrowRight, Check } from 'lucide-react'
 const categories = [
   { eyebrow: 'PILATES', title: 'Pilates', description: 'Movimiento guiado, control y fuerza en grupos reducidos.', featured: true, plans: [

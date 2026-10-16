@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/native-link'
 import { ArrowLeft, Clock, MapPin } from 'lucide-react'
 import { BookingExperience } from '@/components/booking-experience'
 

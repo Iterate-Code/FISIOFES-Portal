@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/native-link'
 import { ArrowLeft } from 'lucide-react'
 import { LoginExperience } from '@/components/login-experience'
 

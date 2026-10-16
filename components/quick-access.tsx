@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/native-link'
 import { CalendarDays, LogIn, Tags } from 'lucide-react'
 
 export function QuickAccess() {

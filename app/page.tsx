@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/native-link'
 import Image from 'next/image'
 import { Activity, ArrowRight, ArrowUpRight, BrainCircuit, Check, HeartHandshake, MapPin, Menu, MessageCircle, ShieldCheck, Sparkles, TrendingUp, Users, X } from 'lucide-react'
 

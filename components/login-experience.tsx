@@ -1,7 +1,7 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
-import Link from 'next/link'
+import Link from '@/components/native-link'
 import { ArrowRight, CalendarDays, Check, LockKeyhole, Users } from 'lucide-react'
 
 export function LoginExperience() {
