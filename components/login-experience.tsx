@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useRef, useState } from 'react'
 import Link from '@/components/native-link'
 import { ArrowRight, LockKeyhole } from 'lucide-react'
+import { readAttribution } from '@/components/attribution-capture'
 
 type Step = 'phone' | 'code' | 'profile'
 
@@ -65,7 +66,11 @@ export function LoginExperience() {
     setError('')
     const { ok, data } = await postJson<{ error?: string; needsProfile?: boolean }>(
       '/api/auth/verify',
-      { phone, code, ...(step === 'profile' ? { name, consent } : {}) },
+      {
+        phone,
+        code,
+        ...(step === 'profile' ? { name, consent, attribution: readAttribution() } : {}),
+      },
     )
     setBusy(false)
     if (!ok) return setError(data.error ?? 'No pudimos verificar el código.')

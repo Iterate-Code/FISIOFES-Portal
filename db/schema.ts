@@ -16,6 +16,9 @@ export const clients = sqliteTable('clients', {
   active: integer('active', { mode: 'boolean' }).notNull().default(true),
   // Set when the person accepts data processing at registration (Ley 1581 de 2012).
   consentAt: text('consent_at'),
+  // First-touch attribution: which piece of content brought this person (see lib/attribution.ts).
+  sourceChannel: text('source_channel'),
+  sourceContent: text('source_content'),
   createdAt: text('created_at')
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`),
@@ -59,6 +62,8 @@ export const bookings = sqliteTable(
       .default(sql`CURRENT_TIMESTAMP`),
     cancelledAt: text('cancelled_at'),
     // Mirror of the booking in Google Calendar (the portal's own record stays in this table).
+    // Set by the team when marking attended / no_show.
+    attendedAt: text('attended_at'),
     calendarEventId: text('calendar_event_id'),
     calendarSync: text('calendar_sync', { enum: ['none', 'ok', 'failed'] })
       .notNull()
@@ -78,6 +83,8 @@ export const prescreenings = sqliteTable('prescreenings', {
   recommendedSlug: text('recommended_slug').notNull(),
   questionnaireVersion: integer('questionnaire_version').notNull(),
   consentAt: text('consent_at').notNull(),
+  sourceChannel: text('source_channel'),
+  sourceContent: text('source_content'),
   contacted: integer('contacted', { mode: 'boolean' }).notNull().default(false),
   createdAt: text('created_at')
     .notNull()
@@ -125,3 +132,48 @@ export const appointmentRequests = sqliteTable('appointment_requests', {
     .default('pending'),
   createdAt: text('created_at').notNull(),
 })
+
+// A piece of content (video, post, reel) the team publishes. Its slug travels in the link
+// (?utm_source=<channel>&utm_content=<slug>) so every person can be traced back to it.
+export const contents = sqliteTable('contents', {
+  id: text('id').primaryKey(),
+  slug: text('slug').notNull().unique(),
+  title: text('title').notNull(),
+  channel: text('channel').notNull(),
+  createdAt: text('created_at').notNull(),
+})
+
+// One row per first visit coming from a registered piece of content (top of the funnel).
+export const touches = sqliteTable(
+  'touches',
+  {
+    id: text('id').primaryKey(),
+    contentSlug: text('content_slug').notNull(),
+    channel: text('channel').notNull(),
+    path: text('path').notNull(),
+    createdAt: text('created_at').notNull(),
+  },
+  (table) => [index('touches_content_idx').on(table.contentSlug)],
+)
+
+// Tasks for the team after a class or a lead: "write to her in 2 days", "ask what happened".
+export const followups = sqliteTable(
+  'followups',
+  {
+    id: text('id').primaryKey(),
+    // Phone (+57...) is the person key: leads without an account also get follow-ups.
+    phone: text('phone').notNull(),
+    kind: text('kind', {
+      enum: ['post_clase', 'inasistencia', 'pre_valoracion', 'solicitud', 'manual'],
+    }).notNull(),
+    bookingId: text('booking_id'),
+    dueDate: text('due_date').notNull(),
+    status: text('status', { enum: ['pending', 'done', 'skipped'] })
+      .notNull()
+      .default('pending'),
+    note: text('note'),
+    createdAt: text('created_at').notNull(),
+    doneAt: text('done_at'),
+  },
+  (table) => [index('followups_phone_idx').on(table.phone)],
+)

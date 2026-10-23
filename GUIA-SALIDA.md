@@ -50,6 +50,8 @@ La base es Cloudflare D1 (SQLite) con Drizzle. Los archivos están en `drizzle/`
 | `0001_brief_hercules.sql` | #3 | tabla `prescreenings` |
 | `0002_early_anita_blake.sql` | #4 | tablas `otp_codes` y `sessions`; columna `clients.consent_at` |
 | `0003_deep_darkstar.sql` | #5 | tabla `appointment_requests` |
+| `0004_nosy_mattie_franklin.sql` | PR de agenda con calendario | columnas `calendar_event_id` y `calendar_sync` en `bookings` |
+| `0005_next_marrow.sql` | PR del recorrido | tablas `contents`, `touches`, `followups`; columnas de origen en `clients` y `prescreenings`; `attended_at` en `bookings` |
 
 - Todas **solo agregan** tablas o una columna nula. No borran ni modifican datos existentes, así que son seguras para aplicar sobre la base actual.
 - Aplícalas en orden y antes de publicar el código de la fase correspondiente. Si publicas el código sin la migración, la ruta responde 500.
@@ -71,6 +73,9 @@ npx wrangler d1 migrations apply DB --local --config <wrangler.json con migratio
 | `AUTH_SECRET` | **sí (nueva)** | Firma de los códigos de ingreso. Sin ella `/api/auth/*` responde 503 | hosting, como secreto |
 | `OTP_WEBHOOK_URL` | **sí en producción (nueva)** | Webhook que envía el código por WhatsApp. Sin ella el ingreso solo funciona en desarrollo | hosting |
 | `OTP_WEBHOOK_SECRET` | recomendada (nueva) | Se envía como `Authorization: Bearer …` al webhook | hosting, como secreto |
+| `GOOGLE_SERVICE_ACCOUNT_JSON` | opcional (nueva) | Clave JSON de la cuenta de servicio de Google. Sin ella el portal usa solo sus propios cupos | hosting, como secreto |
+| `GOOGLE_CALENDAR_READ_IDS` | con la anterior | Calendarios reales a leer para la ocupación, separados por coma (solo lectura) | hosting |
+| `GOOGLE_CALENDAR_WRITE_ID` | con la anterior | Calendario donde el portal escribe las reservas. Usar uno de pruebas primero | hosting |
 
 Genera `AUTH_SECRET` con:
 

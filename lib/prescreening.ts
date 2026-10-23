@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { attributionSchema } from './attribution.ts'
 
 // Bump when questions or triage rules change, so stored answers stay interpretable.
 export const QUESTIONNAIRE_VERSION = 1
@@ -49,6 +50,7 @@ export const submissionSchema = z.object({
   phone: z.string().trim().min(7).max(20),
   consent: z.literal(true),
   answers: answersSchema,
+  attribution: attributionSchema,
 })
 
 export type Answers = z.infer<typeof answersSchema>

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
+import { AttributionCapture } from '@/components/attribution-capture'
 import { QuickAccess } from '@/components/quick-access'
 
 export const metadata: Metadata = {
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </a>
         {children}
         <QuickAccess />
+        <AttributionCapture />
       </body>
     </html>
   )

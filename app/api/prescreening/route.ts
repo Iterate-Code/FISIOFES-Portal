@@ -40,6 +40,8 @@ export async function POST(request: Request) {
     recommendedSlug: outcome.recommendedSlug,
     questionnaireVersion: QUESTIONNAIRE_VERSION,
     consentAt: now,
+    sourceChannel: parsed.data.attribution?.channel ?? null,
+    sourceContent: parsed.data.attribution?.content ?? null,
     // Stored with CURRENT_TIMESTAMP format elsewhere; ISO is fine for the range query above.
     createdAt: now,
   })
