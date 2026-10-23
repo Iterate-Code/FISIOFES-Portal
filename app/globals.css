@@ -3526,3 +3526,205 @@ nav[aria-label] a {
 .login-layout aside h2 em {
   color: var(--aqua-bright);
 }
+
+/* Fase 6: agenda de clases (estilo app). Texto >= 16px, objetivos >= 44px. */
+.classes-page {
+  min-height: 100vh;
+  padding-bottom: 96px;
+}
+.classes {
+  width: min(760px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 24px 0;
+  display: grid;
+  gap: 16px;
+  font-size: 18px;
+}
+.classes-title {
+  margin: 0;
+  font-size: clamp(32px, 6vw, 44px);
+}
+.classes-title:focus {
+  outline: none;
+}
+.classes-plan {
+  margin: 0;
+  padding: 12px 16px;
+  color: var(--ink-deep);
+  background: var(--surface-soft);
+  border-left: 4px solid var(--aqua-dark);
+}
+.classes-message {
+  margin: 0;
+  padding: 12px 16px;
+  font-weight: 700;
+  background: #dcefe3;
+  color: #1d5b3a;
+  border-radius: 8px;
+}
+.day-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.day-strip button,
+.class-filters button {
+  flex: 0 0 auto;
+  min-width: 72px;
+  min-height: 56px;
+  padding: 0 16px;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 700;
+  text-transform: capitalize;
+  background: var(--surface);
+  border: 2px solid var(--field-border);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.day-strip button[aria-selected='true'],
+.class-filters button[aria-pressed='true'] {
+  color: white;
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.class-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.class-filters button {
+  min-height: 48px;
+  text-transform: none;
+}
+.class-list {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.class-card {
+  display: grid;
+  grid-template-columns: 76px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.class-time {
+  display: grid;
+}
+.class-time strong {
+  font-size: 26px;
+  line-height: 1;
+}
+.class-time small,
+.class-info small {
+  color: var(--muted);
+  font-size: 16px;
+}
+.class-info {
+  display: grid;
+  gap: 4px;
+}
+.class-info strong {
+  font-size: 20px;
+}
+.class-info > span {
+  color: var(--muted);
+  font-size: 16px;
+}
+.class-occupancy {
+  height: 8px;
+  overflow: hidden;
+  background: var(--line);
+  border-radius: 999px;
+}
+.class-occupancy i {
+  display: block;
+  height: 100%;
+  background: var(--aqua-dark);
+}
+.class-action {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+}
+.class-action .button {
+  min-height: 52px;
+  font-size: 17px;
+}
+.class-booked,
+.class-full {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 17px;
+  font-weight: 700;
+}
+.class-booked {
+  color: #1d5b3a;
+}
+.class-full {
+  color: var(--muted);
+}
+.class-confirm {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.class-confirm p {
+  flex: 1 1 100%;
+  margin: 0;
+  font-weight: 700;
+}
+@media (max-width: 520px) {
+  .class-card {
+    grid-template-columns: 64px 1fr;
+  }
+  .class-action {
+    grid-column: 1 / -1;
+    justify-items: stretch;
+  }
+  .class-action .button {
+    width: 100%;
+  }
+}
+
+/* Keep the horizontal day strip from stretching the whole page on phones. */
+.classes {
+  grid-template-columns: minmax(0, 1fr);
+}
+.classes > * {
+  min-width: 0;
+}
+
+.admin-code {
+  padding: 16px;
+  font-size: 20px;
+  background: var(--surface-soft);
+  border-left: 4px solid var(--aqua-dark);
+}
+.admin-code strong {
+  font-size: 32px;
+  letter-spacing: 0.12em;
+}
+
+.admin-code {
+  padding: 16px;
+  font-size: 20px;
+  background: var(--surface-soft);
+  border-left: 4px solid var(--aqua-dark);
+}
+.admin-code strong {
+  font-size: 32px;
+  letter-spacing: 0.12em;
+}

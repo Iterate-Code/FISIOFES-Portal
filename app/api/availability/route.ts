@@ -3,6 +3,8 @@ import { getDb } from '../../../db'
 import { classSlots } from '../../../db/schema'
 import { getDailySlots, slotStart, type Service } from '../../../lib/booking-rules'
 import { jsonError } from '../../../lib/api'
+import { getCalendarSetup, realOccupancyForDay } from '../../../lib/calendar'
+import { slotKey } from '../../../lib/calendar/parse'
 
 export async function GET(request: Request) {
   const url = new URL(request.url)
@@ -14,6 +16,18 @@ export async function GET(request: Request) {
 
   const definitions = getDailySlots(date, service)
   if (!definitions.length) return Response.json({ slots: [] })
+  // With the calendar connected, classes already in the team's real calendar take spots too.
+  // If it is configured but unreachable we fail closed instead of risking double bookings.
+  const setup = getCalendarSetup()
+  let real: Record<string, number> = {}
+  if (setup) {
+    try {
+      real = await realOccupancyForDay(setup, date)
+    } catch (error) {
+      console.error('Calendar read failed:', error instanceof Error ? error.message : error)
+      return jsonError('No pudimos consultar la agenda. Inténtalo en unos minutos.', 503)
+    }
+  }
   const db = getDb()
   const stored = await db
     .select()
@@ -30,13 +44,14 @@ export async function GET(request: Request) {
     .filter((slot) => slotStart(slot.date, slot.time).getTime() > now)
     .map((slot) => {
       const row = byId.get(slot.id)
-      const booked = row?.bookedCount ?? 0
+      const taken =
+        (row?.bookedCount ?? 0) + (real[slotKey(slot.date, slot.time, slot.service)] ?? 0)
       return {
         ...slot,
         instructor: row?.instructor ?? null,
-        available: !row?.cancelled && booked < slot.capacity,
-        spotsRemaining: Math.max(0, slot.capacity - booked),
+        available: !row?.cancelled && taken < slot.capacity,
+        spotsRemaining: Math.max(0, slot.capacity - taken),
       }
     })
-  return Response.json({ slots })
+  return Response.json({ slots, source: setup ? 'calendar' : 'portal' })
 }

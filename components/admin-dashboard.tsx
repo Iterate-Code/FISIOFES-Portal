@@ -1,6 +1,8 @@
 'use client'
 
 import { FormEvent, useEffect, useState } from 'react'
+import { AccessCodePanel } from '@/components/admin/access-code-panel'
+import { BookingsPanel } from '@/components/admin/bookings-panel'
 import { PrescreeningsPanel } from '@/components/admin/prescreenings-panel'
 import { RequestsPanel } from '@/components/admin/requests-panel'
 
@@ -13,16 +15,17 @@ type Client = {
   planExpiresAt: string
 }
 
-type Tab = 'solicitudes' | 'prevaloraciones' | 'clientes'
+type Tab = 'reservas' | 'solicitudes' | 'prevaloraciones' | 'clientes'
 
 const TABS: { id: Tab; label: string }[] = [
+  { id: 'reservas', label: 'Reservas de clases' },
   { id: 'solicitudes', label: 'Solicitudes de cita' },
   { id: 'prevaloraciones', label: 'Pre-valoraciones' },
   { id: 'clientes', label: 'Clientes y créditos' },
 ]
 
 export function AdminDashboard({ userName }: { userName: string }) {
-  const [tab, setTab] = useState<Tab>('solicitudes')
+  const [tab, setTab] = useState<Tab>('reservas')
   const [clients, setClients] = useState<Client[]>([])
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
@@ -79,10 +82,12 @@ export function AdminDashboard({ userName }: { userName: string }) {
             </button>
           ))}
         </div>
+        {tab === 'reservas' && <BookingsPanel />}
         {tab === 'solicitudes' && <RequestsPanel />}
         {tab === 'prevaloraciones' && <PrescreeningsPanel />}
         {tab === 'clientes' && (
           <>
+            <AccessCodePanel />
             <h2>Clientes y créditos</h2>
             <p>
               El cliente ingresa con un código por WhatsApp, sin PIN. Aquí activas o renuevas su

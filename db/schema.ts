@@ -58,6 +58,11 @@ export const bookings = sqliteTable(
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
     cancelledAt: text('cancelled_at'),
+    // Mirror of the booking in Google Calendar (the portal's own record stays in this table).
+    calendarEventId: text('calendar_event_id'),
+    calendarSync: text('calendar_sync', { enum: ['none', 'ok', 'failed'] })
+      .notNull()
+      .default('none'),
   },
   (table) => [uniqueIndex('bookings_client_slot_unique').on(table.clientId, table.slotId)],
 )

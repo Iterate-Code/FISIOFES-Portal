@@ -8,13 +8,13 @@ export function QuickAccess() {
         <Tags size={20} />
         <span>Planes</span>
       </Link>
-      <Link href="/contacto" className="quick-primary">
+      <Link href="/clases" className="quick-primary">
         <CalendarDays size={20} />
-        <span>Reservar</span>
+        <span>Clases</span>
       </Link>
-      <Link href="/ingresar">
+      <Link href="/mi-fisiofes">
         <LogIn size={20} />
-        <span>Ingresar</span>
+        <span>Mi cuenta</span>
       </Link>
     </nav>
   )
