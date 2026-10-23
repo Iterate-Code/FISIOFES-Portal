@@ -1,4 +1,5 @@
 import { and, count, desc, eq, gte } from 'drizzle-orm'
+import { z } from 'zod'
 import { getDb } from '../../../db'
 import { prescreenings } from '../../../db/schema'
 import { jsonError, requireAdmin } from '../../../lib/api'
@@ -54,4 +55,19 @@ export async function GET() {
     .orderBy(desc(prescreenings.createdAt))
     .limit(200)
   return Response.json({ prescreenings: rows })
+}
+
+const contactedSchema = z.object({ id: z.string().min(1), contacted: z.boolean() })
+
+export async function PATCH(request: Request) {
+  if (!(await requireAdmin())) return jsonError('No autorizado.', 403)
+  const parsed = contactedSchema.safeParse(await request.json().catch(() => null))
+  if (!parsed.success) return jsonError('Datos inválidos.')
+  const updated = await getDb()
+    .update(prescreenings)
+    .set({ contacted: parsed.data.contacted })
+    .where(eq(prescreenings.id, parsed.data.id))
+    .returning({ id: prescreenings.id, contacted: prescreenings.contacted })
+  if (!updated.length) return jsonError('Pre-valoración no encontrada.', 404)
+  return Response.json({ prescreening: updated[0] })
 }
