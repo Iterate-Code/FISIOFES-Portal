@@ -1,6 +1,6 @@
 import { and, asc, eq, gte } from 'drizzle-orm'
 import { getDb } from '../../../../db'
-import { bookings, classSlots } from '../../../../db/schema'
+import { appointmentRequests, bookings, classSlots } from '../../../../db/schema'
 import { jsonError } from '../../../../lib/api'
 import { getSessionClient } from '../../../../lib/auth-session'
 
@@ -28,6 +28,20 @@ export async function GET(request: Request) {
     .orderBy(asc(classSlots.startsAt))
     .limit(20)
 
+  const requests = await getDb()
+    .select({
+      id: appointmentRequests.id,
+      serviceSlug: appointmentRequests.serviceSlug,
+      branch: appointmentRequests.branch,
+      preferredDate: appointmentRequests.preferredDate,
+    })
+    .from(appointmentRequests)
+    .where(
+      and(eq(appointmentRequests.clientId, client.id), eq(appointmentRequests.status, 'pending')),
+    )
+    .orderBy(asc(appointmentRequests.createdAt))
+    .limit(10)
+
   return Response.json({
     client: {
       id: client.id,
@@ -38,5 +52,6 @@ export async function GET(request: Request) {
       planExpiresAt: client.planExpiresAt,
     },
     upcoming,
+    requests,
   })
 }

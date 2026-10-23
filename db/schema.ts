@@ -103,3 +103,20 @@ export const sessions = sqliteTable('sessions', {
   expiresAt: text('expires_at').notNull(),
   createdAt: text('created_at').notNull(),
 })
+
+export const appointmentRequests = sqliteTable('appointment_requests', {
+  id: text('id').primaryKey(),
+  clientId: integer('client_id')
+    .notNull()
+    .references(() => clients.id),
+  // Slug of a category in lib/catalog.ts.
+  serviceSlug: text('service_slug').notNull(),
+  branch: text('branch', { enum: ['calarca', 'senior-mall', 'sin-preferencia'] }).notNull(),
+  schedule: text('schedule', { enum: ['manana', 'tarde', 'sin-preferencia'] }).notNull(),
+  preferredDate: text('preferred_date'),
+  note: text('note'),
+  status: text('status', { enum: ['pending', 'confirmed', 'cancelled'] })
+    .notNull()
+    .default('pending'),
+  createdAt: text('created_at').notNull(),
+})

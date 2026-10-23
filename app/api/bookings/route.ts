@@ -1,51 +1,30 @@
 import { and, eq, gt, gte, or, sql } from 'drizzle-orm'
 import { getDb } from '../../../db'
 import { bookings, classSlots, clients } from '../../../db/schema'
-import {
-  canUseCredit,
-  getDailySlots,
-  isValidPhone,
-  normalizePhone,
-  slotStart,
-  type Service,
-} from '../../../lib/booking-rules'
+import { canUseCredit, getDailySlots, slotStart, type Service } from '../../../lib/booking-rules'
 import { jsonError } from '../../../lib/api'
-import { verifyPin } from '../../../lib/security'
+import { getSessionClient } from '../../../lib/auth-session'
 
 export async function POST(request: Request) {
-  const payload = (await request.json()) as {
-    name?: string
-    phone?: string
-    pin?: string
+  const client = await getSessionClient(request)
+  if (!client) return jsonError('Inicia sesión para reservar tu clase.', 401)
+
+  const payload = (await request.json().catch(() => ({}))) as {
     service?: Service
     date?: string
     time?: string
   }
-  const name = payload.name?.trim() ?? ''
-  const phone = normalizePhone(payload.phone ?? '')
-  const pin = payload.pin ?? ''
   const service = payload.service as Service
   const date = payload.date ?? ''
   const time = payload.time ?? ''
   const slot = ['pilates', 'training'].includes(service)
     ? getDailySlots(date, service).find((item) => item.time === time)
     : undefined
-  if (!name || !isValidPhone(phone) || !slot) return jsonError('Datos de reserva inválidos.')
+  if (!slot) return jsonError('Datos de reserva inválidos.')
   if (slotStart(date, time).getTime() <= Date.now())
     return jsonError('Selecciona una clase futura.')
 
   const db = getDb()
-  let [client] = await db.select().from(clients).where(eq(clients.phone, phone)).limit(1)
-  if (!client) {
-    ;[client] = await db.insert(clients).values({ name, phone }).returning()
-    return jsonError(
-      'Tu perfil fue creado. Fisiofes debe activar un plan y entregarte un PIN antes de reservar.',
-      402,
-      { code: 'PLAN_REQUIRED' },
-    )
-  }
-  if (!client.active || !(await verifyPin(pin, client.accessPinHash)))
-    return jsonError('Teléfono o PIN incorrecto.', 401)
   const credit = canUseCredit(
     {
       service: client.planService,
