@@ -1,6 +1,6 @@
 import Link from '@/components/native-link'
 import { ArrowLeft, ArrowRight, Clock, MapPin } from 'lucide-react'
-import { BookingExperience } from '@/components/booking-experience'
+import { BookingFlow } from '@/components/booking/booking-flow'
 
 export const metadata = { title: 'Reservar' }
 
@@ -23,7 +23,7 @@ export default function ContactoPage() {
             <br />
             <em>a tu ritmo.</em>
           </h1>
-          <p>Solicita el horario que prefieres. No se realiza ningún cobro en este paso.</p>
+          <p>Reserva tu clase con tu plan o pide una cita. No se hace ningún cobro en línea.</p>
           <div className="reservation-facts">
             <span>
               <Clock size={20} />
@@ -35,8 +35,15 @@ export default function ContactoPage() {
             <span>
               <MapPin size={20} />
               <span>
-                <strong>Senior&apos;s Mall</strong>
-                <small>Armenia, Quindío · dirección por confirmar.</small>
+                <strong>Calarcá</strong>
+                <small>Calle 37 #25-52</small>
+              </span>
+            </span>
+            <span>
+              <MapPin size={20} />
+              <span>
+                <strong>Senior&apos;s Mall, Armenia</strong>
+                <small>Vía La Tebaida–El Caimo, km 1</small>
               </span>
             </span>
           </div>
@@ -44,7 +51,7 @@ export default function ContactoPage() {
             ¿Primera vez? Haz la pre-valoración (2 minutos) <ArrowRight size={17} />
           </Link>
         </aside>
-        <BookingExperience />
+        <BookingFlow />
       </section>
     </main>
   )

@@ -6,6 +6,12 @@ import { ArrowRight, LockKeyhole } from 'lucide-react'
 
 type Step = 'phone' | 'code' | 'profile'
 
+// Only same-site relative paths, so the login cannot be used as an open redirect.
+function safeNext(): string {
+  const next = new URLSearchParams(window.location.search).get('next') ?? ''
+  return next.startsWith('/') && !next.startsWith('//') ? next : '/mi-fisiofes'
+}
+
 async function postJson<T>(url: string, body: unknown): Promise<{ ok: boolean; data: T }> {
   const response = await fetch(url, {
     method: 'POST',
@@ -65,7 +71,7 @@ export function LoginExperience() {
       setStep('profile')
       return
     }
-    window.location.assign('/mi-fisiofes')
+    window.location.assign(safeNext())
   }
 
   return (

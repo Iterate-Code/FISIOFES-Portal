@@ -55,7 +55,7 @@ export function AdminDashboard({ userName }: { userName: string }) {
       <section className="section">
         <p className="eyebrow">ADMINISTRACIÓN</p>
         <h1>Clientes y créditos</h1>
-        <p>Activa o renueva planes. El PIN se entrega directamente al cliente.</p>
+        <p>Activa o renueva planes. El cliente ingresa con un código por WhatsApp, sin PIN.</p>
         <form className="login-card" onSubmit={save}>
           <div className="field-grid">
             <label className="field">
@@ -69,10 +69,6 @@ export function AdminDashboard({ userName }: { userName: string }) {
             <label className="field">
               <span>Correo (opcional)</span>
               <input name="email" type="email" />
-            </label>
-            <label className="field">
-              <span>PIN (4–8 números)</span>
-              <input name="pin" inputMode="numeric" pattern="[0-9]{4,8}" required />
             </label>
             <label className="field">
               <span>Plan</span>

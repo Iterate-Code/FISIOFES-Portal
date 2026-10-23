@@ -1,7 +1,7 @@
 import { inArray } from 'drizzle-orm'
 import { getDb } from '../../../db'
 import { classSlots } from '../../../db/schema'
-import { getDailySlots, type Service } from '../../../lib/booking-rules'
+import { getDailySlots, slotStart, type Service } from '../../../lib/booking-rules'
 import { jsonError } from '../../../lib/api'
 
 export async function GET(request: Request) {
@@ -25,15 +25,18 @@ export async function GET(request: Request) {
       ),
     )
   const byId = new Map(stored.map((slot) => [slot.id, slot]))
-  const slots = definitions.map((slot) => {
-    const row = byId.get(slot.id)
-    const booked = row?.bookedCount ?? 0
-    return {
-      ...slot,
-      instructor: row?.instructor ?? null,
-      available: !row?.cancelled && booked < slot.capacity,
-      spotsRemaining: Math.max(0, slot.capacity - booked),
-    }
-  })
+  const now = Date.now()
+  const slots = definitions
+    .filter((slot) => slotStart(slot.date, slot.time).getTime() > now)
+    .map((slot) => {
+      const row = byId.get(slot.id)
+      const booked = row?.bookedCount ?? 0
+      return {
+        ...slot,
+        instructor: row?.instructor ?? null,
+        available: !row?.cancelled && booked < slot.capacity,
+        spotsRemaining: Math.max(0, slot.capacity - booked),
+      }
+    })
   return Response.json({ slots })
 }

@@ -3194,3 +3194,37 @@ footer {
   margin-bottom: 24px;
   padding-bottom: 4px;
 }
+
+/* Fase 4: reserva en pasos */
+.booking-times {
+  grid-template-columns: repeat(2, 1fr);
+}
+.prescreen-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.prescreen-card textarea {
+  width: 100%;
+  min-height: 96px;
+  padding: 14px;
+  font: inherit;
+  font-size: 20px;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+}
+.account-list li > button {
+  margin-left: auto;
+}
+
+/* On phones the booking steps come first; the info aside goes below. */
+@media (max-width: 900px) {
+  .reservation-layout > .prescreen-card {
+    order: -1;
+    width: 100%;
+    margin: 0;
+  }
+  .reservation-layout > aside .text-link {
+    display: inline-flex;
+    margin-top: 20px;
+  }
+}
