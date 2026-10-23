@@ -31,6 +31,7 @@ export function LoginExperience() {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const [devCode, setDevCode] = useState('')
+  const [manual, setManual] = useState(false)
   const heading = useRef<HTMLHeadingElement>(null)
 
   useEffect(() => {
@@ -42,13 +43,14 @@ export function LoginExperience() {
     if (!phone.trim()) return setError('Escribe tu número de WhatsApp.')
     setBusy(true)
     setError('')
-    const { ok, data } = await postJson<{ error?: string; devCode?: string }>(
+    const { ok, data } = await postJson<{ error?: string; devCode?: string; manual?: boolean }>(
       '/api/auth/request-code',
       { phone },
     )
     setBusy(false)
     if (!ok) return setError(data.error ?? 'No pudimos enviar el código.')
     setDevCode(data.devCode ?? '')
+    setManual(Boolean(data.manual))
     setCode('')
     setStep('code')
   }
@@ -114,7 +116,9 @@ export function LoginExperience() {
           </h1>
           <p className="login-lede">
             {step === 'code'
-              ? `Te enviamos un código por WhatsApp al ${phone}.`
+              ? manual
+                ? `Pide tu código al equipo de Fisiofes. Cuando lo tengas, escríbelo aquí para el ${phone}.`
+                : `Te enviamos un código por WhatsApp al ${phone}.`
               : 'Es tu primera vez. Cuéntanos tu nombre para crear tu cuenta.'}
           </p>
           {devCode && (

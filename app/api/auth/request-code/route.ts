@@ -24,6 +24,12 @@ export async function POST(request: Request) {
   const secret = process.env.AUTH_SECRET
   if (!secret) return jsonError('El ingreso no está disponible por ahora.', 503)
 
+  // No delivery channel (no webhook outside development): the team issues the code by hand
+  // from /admin. Do not create a code nobody will receive.
+  if (!process.env.OTP_WEBHOOK_URL && process.env.NODE_ENV !== 'development') {
+    return Response.json({ sent: false, manual: true })
+  }
+
   const db = getDb()
   const now = Date.now()
   const since = new Date(now - CODE_WINDOW_MS).toISOString()

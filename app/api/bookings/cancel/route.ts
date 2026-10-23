@@ -2,6 +2,7 @@ import { eq, sql } from 'drizzle-orm'
 import { getDb } from '../../../../db'
 import { bookings, classSlots, clients } from '../../../../db/schema'
 import { jsonError } from '../../../../lib/api'
+import { getCalendarSetup } from '../../../../lib/calendar'
 import { validateCancellation } from '../../../../lib/booking-rules'
 
 export async function POST(request: Request) {
@@ -51,6 +52,15 @@ export async function POST(request: Request) {
           updatedAt: new Date().toISOString(),
         })
         .where(eq(clients.id, client.id))
+  }
+  // Remove the mirrored event. Best effort: the booking is already cancelled in the portal.
+  const setup = getCalendarSetup()
+  if (setup?.writeId && booking.calendarEventId) {
+    try {
+      await setup.client.deleteEvent(setup.writeId, booking.calendarEventId)
+    } catch (error) {
+      console.error('Calendar delete failed:', error instanceof Error ? error.message : error)
+    }
   }
   return Response.json({ cancelled: true, creditRefunded: policy.refundCredit })
 }
