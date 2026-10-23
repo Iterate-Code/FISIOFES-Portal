@@ -6,7 +6,7 @@ export const metadata = { title: 'Ingresar' }
 
 export default function IngresarPage() {
   return (
-    <main className="login-page">
+    <main id="contenido" className="login-page">
       <header className="member-header">
         <Link href="/" className="brand-lockup">
           <img src="/fisiofes-logo.svg" alt="Fisiofes" />

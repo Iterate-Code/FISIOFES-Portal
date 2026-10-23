@@ -6,7 +6,7 @@ export const metadata = { title: 'Reservar' }
 
 export default function ContactoPage() {
   return (
-    <main className="reservation-page">
+    <main id="contenido" className="reservation-page">
       <header className="member-header">
         <Link href="/" className="brand-lockup">
           <img src="/fisiofes-logo.svg" alt="Fisiofes" />

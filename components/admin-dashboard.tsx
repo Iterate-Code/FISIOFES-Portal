@@ -56,7 +56,7 @@ export function AdminDashboard({ userName }: { userName: string }) {
   }
 
   return (
-    <main className="reservation-page">
+    <main id="contenido" className="reservation-page">
       <header className="member-header">
         <a className="brand-lockup" href="/">
           <img src="/fisiofes-logo.svg" alt="Fisiofes" />

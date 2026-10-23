@@ -3316,3 +3316,213 @@ footer {
   color: #8a2a2a;
   font-weight: 700;
 }
+
+/* ==========================================================================
+   Fase 5: accesibilidad para adulto mayor (WCAG 2.2 AA)
+   Medido antes y después con un escaneo de tamaños, contraste y objetivos.
+   - Texto de lectura >= 16px; micro-etiquetas en mayúsculas >= 14px.
+   - Contraste de texto >= 4.5:1 y de bordes de campos >= 3:1.
+   - Objetivos táctiles >= 44px, foco visible y respeto a prefers-reduced-motion.
+   ========================================================================== */
+:root {
+  --muted: #456270;
+  --aqua-dark: #2f648f;
+  --field-border: #74878a;
+  --focus-ring: #102f43;
+}
+
+body {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+/* Foco visible en dos tonos: se ve sobre fondos claros y oscuros. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 7px rgba(255, 255, 255, 0.95);
+}
+
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1000;
+  padding: 14px 20px;
+  color: white;
+  font-weight: 700;
+  background: var(--ink-deep);
+  border-radius: 8px;
+  transform: translateY(-200%);
+}
+.skip-link:focus {
+  transform: none;
+}
+
+/* Contraste del botón principal: texto blanco sobre un degradado oscuro. */
+.button-primary,
+.quick-access .quick-primary,
+.success-mark,
+.location-index {
+  background: linear-gradient(110deg, #1b7f92, #2e628b);
+}
+.button-primary:hover {
+  background: linear-gradient(110deg, #17728a, #285a86);
+}
+
+/* Bordes de campos con contraste 3:1. */
+.field input,
+.field select,
+.field textarea,
+.input-shell,
+.prescreen-contact input:not([type='checkbox']),
+.prescreen-card textarea {
+  border-color: var(--field-border);
+}
+.prescreen-option,
+.prescreen-pain button {
+  border-color: var(--field-border);
+}
+
+/* Micro-etiquetas: nunca menos de 14px. */
+.trust-kicker,
+.hero-shortcuts > span,
+.live-badge,
+.console-head,
+.console-head span,
+.console-stats small,
+.console-stats strong,
+.humanity-note,
+.goal-ribbon-label,
+.goal-chip,
+.eyebrow,
+.priority-badge,
+.process-top,
+.process-top span,
+.route-number,
+.route-tag,
+.assessment-panel small,
+.service-row > span,
+.class-video-hint,
+.preview-label,
+.location-index,
+.summary-label,
+.pricing-recommended,
+.proof-faces span,
+.quick-access span,
+.community-quote small,
+.service-summary span:not(.summary-label),
+.portal-list span,
+.footer-bottom span {
+  font-size: 14px;
+}
+
+/* Texto de lectura: nunca menos de 16px. */
+.hero-shortcuts a,
+.text-link,
+.route-cta,
+.process-card p,
+.pending-price,
+.service-row p,
+.booking-assurances span,
+.footer-top p,
+.footer-bottom a,
+.hero-proof p,
+.header-link,
+.header-cta,
+.login-security,
+.pricing-note p,
+.route-card p,
+.assessment-panel p,
+.humanity-note span,
+.location-content p,
+.intelligence-grid p,
+.priority-card p,
+.community-copy p,
+.brand-story-copy p {
+  font-size: 16px;
+}
+
+/* Objetivos táctiles de al menos 44px. */
+.hero-shortcuts a,
+.text-link,
+.header-link,
+.footer-bottom a,
+nav[aria-label] a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Fase 5 (segunda pasada): lo que se lee como texto corrido va a 16px; solo los
+   números decorativos (01, 45+) y las etiquetas en mayúsculas se quedan en 14px. */
+.site-header nav a,
+.goal-chip,
+.goal-ribbon-label,
+.console-stats small,
+.console-stats strong,
+.priority-card strong small,
+.preview-option small,
+.reservation-facts small,
+.service-summary span:not(.summary-label),
+.footer-bottom span,
+.quick-access span,
+.pending-price,
+.assessment-copy .pending-price,
+.detail-copy .text-link,
+.class-video figcaption strong {
+  font-size: 16px;
+}
+.class-video figcaption span {
+  font-size: 14px;
+}
+
+/* Fase 5: contraste de acentos sobre fondos oscuros y de color. */
+.priority-feature .priority-badge,
+.intelligence h2 em {
+  color: var(--aqua-bright);
+}
+.route-active em,
+.route-longevity em {
+  color: var(--ink-deep);
+}
+.booking .booking-intro > p {
+  color: rgba(255, 255, 255, 0.86);
+}
+.pending-price,
+.assessment-copy .pending-price {
+  font-size: 16px !important;
+}
+
+/* La consola de progreso del héroe es una ilustración con datos de ejemplo: en
+   móvil estorba y puede parecer una cuenta real, así que se oculta. */
+@media (max-width: 680px) {
+  .progress-console {
+    display: none;
+  }
+}
+
+/* Acentos en cursiva sobre los paneles oscuros de reserva e ingreso. */
+.reservation-layout aside h1 em,
+.login-layout aside h2 em {
+  color: var(--aqua-bright);
+}
