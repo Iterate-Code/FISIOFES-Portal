@@ -1,4 +1,5 @@
 import { and, count, desc, eq } from 'drizzle-orm'
+import { z } from 'zod'
 import { getDb } from '../../../db'
 import { appointmentRequests, clients } from '../../../db/schema'
 import { jsonError, requireAdmin } from '../../../lib/api'
@@ -69,4 +70,22 @@ export async function GET() {
     .orderBy(desc(appointmentRequests.createdAt))
     .limit(200)
   return Response.json({ requests: rows })
+}
+
+const statusSchema = z.object({
+  id: z.string().min(1),
+  status: z.enum(['pending', 'confirmed', 'cancelled']),
+})
+
+export async function PATCH(request: Request) {
+  if (!(await requireAdmin())) return jsonError('No autorizado.', 403)
+  const parsed = statusSchema.safeParse(await request.json().catch(() => null))
+  if (!parsed.success) return jsonError('Datos inválidos.')
+  const updated = await getDb()
+    .update(appointmentRequests)
+    .set({ status: parsed.data.status })
+    .where(eq(appointmentRequests.id, parsed.data.id))
+    .returning({ id: appointmentRequests.id, status: appointmentRequests.status })
+  if (!updated.length) return jsonError('Solicitud no encontrada.', 404)
+  return Response.json({ request: updated[0] })
 }

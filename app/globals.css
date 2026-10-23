@@ -3228,3 +3228,91 @@ footer {
     margin-top: 20px;
   }
 }
+
+/* Vista del equipo (/admin) */
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 24px;
+}
+.admin-tabs button,
+.admin-filters button,
+.admin-actions button,
+.admin-actions a {
+  min-height: 44px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 700;
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.admin-tabs button[aria-selected='true'],
+.admin-filters button[aria-pressed='true'] {
+  color: white;
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.admin-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+.admin-list,
+.admin-answers {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.admin-item {
+  display: grid;
+  gap: 6px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.admin-item p {
+  margin: 0;
+}
+.admin-answers {
+  gap: 2px;
+  color: var(--muted);
+}
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.admin-badge {
+  margin-left: 10px;
+  padding: 3px 10px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 999px;
+  background: var(--surface-soft);
+}
+.admin-badge-confirmed {
+  color: #1d5b3a;
+  background: #dcefe3;
+}
+.admin-badge-cancelled {
+  color: #6b6b6b;
+  background: #e8e6e1;
+}
+.admin-badge-alert {
+  color: #8a2a2a;
+  background: #f5dcdc;
+}
+.admin-flags {
+  color: #8a2a2a;
+  font-weight: 700;
+}
