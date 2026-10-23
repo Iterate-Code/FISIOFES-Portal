@@ -9,6 +9,8 @@ export function otpMessage(code: string): string {
 }
 
 export async function sendCode(phone: string, code: string): Promise<Delivery> {
+  // Demo deployment: nobody receives WhatsApp messages, so the code is shown on screen.
+  if (process.env.DEMO_MODE === '1') return { devCode: code }
   const url = process.env.OTP_WEBHOOK_URL
   if (url) {
     const secret = process.env.OTP_WEBHOOK_SECRET

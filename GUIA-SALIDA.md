@@ -143,3 +143,15 @@ Prueba antes de publicar: pide un código desde `/ingresar` con un número real 
 - Las reglas del proyecto están en `AGENTS.md`. Cada persona trabaja en su rama y abre PR hacia `main` una vez fusionada la cadena.
 - Los archivos más propensos a conflicto: `app/globals.css` (todas las fases añaden bloques al final) y `app/page.tsx`. Fusionen la cadena completa antes de abrir ramas nuevas.
 - Siguientes tareas con valor, en este orden sugerido: (1) conectar el envío de WhatsApp y probar el ingreso real; (2) validar las reglas clínicas; (3) aviso automático al confirmar solicitudes; (4) integración con Saludtools; (5) pruebas automáticas de API y de interfaz, e integración continua.
+
+## 8. Despliegue de demostración (Cloudflare)
+
+Para enseñar el portal sin tocar la producción: una copia pública con datos inventados.
+
+- **Qué es:** `DEMO_MODE=1`. El código de ingreso se muestra en pantalla, el calendario es simulado, cada cuenta nueva recibe un plan de ejemplo (4 clases), hay un aviso "Versión de prueba" y `noindex` en todas las páginas. `/admin` se abre con una clave de demostración (`DEMO_ADMIN_KEY`).
+- **Nunca** definas `DEMO_MODE` en el sitio real: quien lo vea tendría el código en pantalla y no habría verificación de teléfono.
+- **No definas `FISIOFES_ADMIN_EMAIL` en la demo.** `requireAdmin` confía en el encabezado `oai-authenticated-user-email`, que solo es seguro detrás del hosting administrado; en un Worker propio cualquiera podría enviarlo.
+- Datos de ejemplo: `node scripts/make-demo-seed.mjs > demo-seed.sql` (12 personas inventadas con teléfonos `+57300000xxxx`, fechas relativas a hoy).
+- Compilar con la variable puesta (el `noindex` se calcula al compilar): `DEMO_MODE=1 npm run build`.
+- Configuración: `node scripts/make-demo-config.mjs --name fisiofes-demo --d1 <id-de-la-base>` genera `dist/server/wrangler.demo.json`.
+- Secretos de la demo (con `wrangler secret put`): `AUTH_SECRET` y `DEMO_ADMIN_KEY`.

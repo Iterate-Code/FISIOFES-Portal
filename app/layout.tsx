@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { AttributionCapture } from '@/components/attribution-capture'
+import { DemoBanner } from '@/components/demo-banner'
+import { isDemo } from '@/lib/demo'
 import { QuickAccess } from '@/components/quick-access'
 
-export const metadata: Metadata = {
+const baseMetadata: Metadata = {
   metadataBase: new URL('https://fisiofes.com'),
   title: { default: 'Fisiofes | Tu objetivo, tu ruta', template: '%s | Fisiofes' },
   description:
@@ -23,6 +25,11 @@ export const metadata: Metadata = {
   },
 }
 
+// A demo deployment asks search engines not to index it.
+export function generateMetadata(): Metadata {
+  return isDemo() ? { ...baseMetadata, robots: { index: false, follow: false } } : baseMetadata
+}
+
 export const viewport: Viewport = {
   colorScheme: 'light',
   themeColor: '#44D0D2',
@@ -34,6 +41,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="es" className="bg-background">
       <body>
+        <DemoBanner />
         <a className="skip-link" href="#contenido">
           Saltar al contenido
         </a>

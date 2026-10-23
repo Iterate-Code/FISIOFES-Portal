@@ -24,7 +24,8 @@ function list(value: string | undefined): string[] {
  * GOOGLE_CALENDAR_WRITE_ID. CALENDAR_MOCK=1 enables a local demo calendar (development only).
  */
 export function getCalendarSetup(): CalendarSetup | null {
-  if (process.env.CALENDAR_MOCK === '1' && process.env.NODE_ENV === 'development') {
+  const demoAllowed = process.env.NODE_ENV === 'development' || process.env.DEMO_MODE === '1'
+  if (process.env.CALENDAR_MOCK === '1' && demoAllowed) {
     return { client: createMockCalendar(), readIds: ['demo'], writeId: 'demo-test', mock: true }
   }
   const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON

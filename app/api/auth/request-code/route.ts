@@ -26,7 +26,11 @@ export async function POST(request: Request) {
 
   // No delivery channel (no webhook outside development): the team issues the code by hand
   // from /admin. Do not create a code nobody will receive.
-  if (!process.env.OTP_WEBHOOK_URL && process.env.NODE_ENV !== 'development') {
+  if (
+    !process.env.OTP_WEBHOOK_URL &&
+    process.env.NODE_ENV !== 'development' &&
+    process.env.DEMO_MODE !== '1'
+  ) {
     return Response.json({ sent: false, manual: true })
   }
 

@@ -16,7 +16,10 @@ import {
 } from '../../../../lib/auth'
 import { isSecureRequest } from '../../../../lib/auth-session'
 import { attributionSchema } from '../../../../lib/attribution'
+import { bogotaDate } from '../../../../lib/booking-dates'
 import { isValidPhone, normalizePhone } from '../../../../lib/booking-rules'
+import { addDays } from '../../../../lib/journey'
+import { isDemo } from '../../../../lib/demo'
 
 const bodySchema = z.object({
   phone: z.string().trim().min(7).max(20),
@@ -74,6 +77,15 @@ export async function POST(request: Request) {
         updatedAt: now,
         sourceChannel: parsed.data.attribution?.channel ?? null,
         sourceContent: parsed.data.attribution?.content ?? null,
+        // Demo deployment: every new account gets a sample plan so classes can be booked.
+        ...(isDemo()
+          ? {
+              planService: 'dual' as const,
+              creditsTotal: 4,
+              creditsRemaining: 4,
+              planExpiresAt: addDays(bogotaDate(new Date()), 30),
+            }
+          : {}),
       })
       .returning()
     client = created
