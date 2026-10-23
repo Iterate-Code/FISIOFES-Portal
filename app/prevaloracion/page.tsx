@@ -6,7 +6,7 @@ export const metadata = { title: 'Pre-valoración' }
 
 export default function PrevaloracionPage() {
   return (
-    <main className="prescreen-page">
+    <main id="contenido" className="prescreen-page">
       <header className="member-header">
         <Link href="/" className="brand-lockup">
           <img src="/fisiofes-logo.svg" alt="Fisiofes" />

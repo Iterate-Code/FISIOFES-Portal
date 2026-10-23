@@ -33,6 +33,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="es" className="bg-background">
       <body>
+        <a className="skip-link" href="#contenido">
+          Saltar al contenido
+        </a>
         {children}
         <QuickAccess />
       </body>

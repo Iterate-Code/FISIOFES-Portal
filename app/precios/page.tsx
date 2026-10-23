@@ -6,7 +6,7 @@ export const metadata = { title: 'Servicios y planes' }
 
 export default function PreciosPage() {
   return (
-    <main>
+    <main id="contenido">
       <header className="member-header">
         <Link href="/" className="brand-lockup">
           <img src="/fisiofes-logo.svg" alt="FisioFES" />

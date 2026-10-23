@@ -6,7 +6,7 @@ export const metadata = { title: 'Mi Fisiofes' }
 
 export default function MiFisiofesPage() {
   return (
-    <main className="login-page">
+    <main id="contenido" className="login-page">
       <header className="member-header">
         <Link href="/" className="brand-lockup">
           <img src="/fisiofes-logo.svg" alt="Fisiofes" />

@@ -25,7 +25,7 @@ export default function CancelPage() {
     setBusy(false)
   }
   return (
-    <main className="login-page">
+    <main id="contenido" className="login-page">
       <section className="login-card">
         <p className="eyebrow">GESTIONAR RESERVA</p>
         <h1>Cancelar clase</h1>

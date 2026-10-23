@@ -98,7 +98,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 export default function Home() {
   return (
-    <main>
+    <main id="contenido">
       <Header />
       <section className="hero">
         <div className="hero-copy">
@@ -151,7 +151,7 @@ export default function Home() {
             sizes="(max-width: 1050px) 100vw, 48vw"
           />
           <div className="hero-overlay" />
-          <div className="progress-console">
+          <div className="progress-console" aria-hidden="true">
             <div className="console-head">
               <span>
                 <Sparkles size={16} /> TU RUTA FISIOFES
@@ -469,9 +469,7 @@ export default function Home() {
             <video
               src="/videos/entrenamiento-funcional-grupal.mp4"
               aria-label="Clase grupal de entrenamiento funcional"
-              autoPlay
               muted
-              loop
               playsInline
               preload="metadata"
               controls
@@ -485,9 +483,7 @@ export default function Home() {
             <video
               src="/videos/reformer-adulta-mayor.mp4"
               aria-label="Sesión de Pilates reformer para una adulta mayor"
-              autoPlay
               muted
-              loop
               playsInline
               preload="metadata"
               controls
@@ -501,9 +497,7 @@ export default function Home() {
             <video
               src="/videos/pilates-adulta.mp4"
               aria-label="Sesión de Pilates para una mujer adulta"
-              autoPlay
               muted
-              loop
               playsInline
               preload="metadata"
               controls
@@ -517,9 +511,7 @@ export default function Home() {
             <video
               src="/videos/movilidad-precision-bola.mp4"
               aria-label="Ejercicio de movilidad y precisión con una bola"
-              autoPlay
               muted
-              loop
               playsInline
               preload="metadata"
               controls

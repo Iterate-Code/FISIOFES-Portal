@@ -8,7 +8,7 @@ export default async function AdminPage() {
   const allowed = user.email.toLowerCase() === process.env.FISIOFES_ADMIN_EMAIL?.toLowerCase()
   if (!allowed)
     return (
-      <main className="login-page">
+      <main id="contenido" className="login-page">
         <section className="login-card">
           <h1>Acceso restringido</h1>
           <p>Esta cuenta no está autorizada para administrar Fisiofes.</p>
