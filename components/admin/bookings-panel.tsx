@@ -48,6 +48,24 @@ export function BookingsPanel() {
       .catch(() => setMessage('No pudimos cargar las reservas.'))
   }, [])
 
+  async function mark(id: string, status: 'attended' | 'no_show' | 'confirmed') {
+    setMessage('')
+    const response = await fetch('/api/admin/bookings', {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id, status }),
+    })
+    const result = (await response.json()) as { error?: string }
+    setMessage(
+      response.ok
+        ? status === 'confirmed'
+          ? 'Asistencia deshecha.'
+          : 'Asistencia registrada. Creamos un seguimiento para esta persona.'
+        : (result.error ?? 'Error.'),
+    )
+    await load()
+  }
+
   async function retry(id: string) {
     setMessage('')
     const response = await fetch('/api/admin/bookings', {
@@ -89,6 +107,25 @@ export function BookingsPanel() {
             <p>
               {row.clientName} · {row.clientPhone} · {SYNC[row.calendarSync]}
             </p>
+            {row.status !== 'cancelled' && (
+              <div className="admin-actions">
+                {row.status !== 'attended' && (
+                  <button type="button" onClick={() => mark(row.id, 'attended')}>
+                    Asistió
+                  </button>
+                )}
+                {row.status !== 'no_show' && (
+                  <button type="button" onClick={() => mark(row.id, 'no_show')}>
+                    No asistió
+                  </button>
+                )}
+                {(row.status === 'attended' || row.status === 'no_show') && (
+                  <button type="button" onClick={() => mark(row.id, 'confirmed')}>
+                    Deshacer
+                  </button>
+                )}
+              </div>
+            )}
             {row.status === 'confirmed' && row.calendarSync !== 'ok' && calendar?.writes && (
               <div className="admin-actions">
                 <button type="button" onClick={() => retry(row.id)}>

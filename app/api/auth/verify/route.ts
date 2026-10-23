@@ -15,6 +15,7 @@ import {
   sha256Hex,
 } from '../../../../lib/auth'
 import { isSecureRequest } from '../../../../lib/auth-session'
+import { attributionSchema } from '../../../../lib/attribution'
 import { isValidPhone, normalizePhone } from '../../../../lib/booking-rules'
 
 const bodySchema = z.object({
@@ -22,6 +23,7 @@ const bodySchema = z.object({
   code: z.string().trim().min(4).max(12),
   name: z.string().trim().min(2).max(120).optional(),
   consent: z.boolean().optional(),
+  attribution: attributionSchema,
 })
 
 const INVALID = 'El código no es correcto o ya venció. Pide uno nuevo.'
@@ -65,7 +67,14 @@ export async function POST(request: Request) {
     const now = new Date().toISOString()
     const [created] = await db
       .insert(clients)
-      .values({ name: parsed.data.name, phone, consentAt: now, updatedAt: now })
+      .values({
+        name: parsed.data.name,
+        phone,
+        consentAt: now,
+        updatedAt: now,
+        sourceChannel: parsed.data.attribution?.channel ?? null,
+        sourceContent: parsed.data.attribution?.content ?? null,
+      })
       .returning()
     client = created
   }

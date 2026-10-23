@@ -3728,3 +3728,175 @@ nav[aria-label] a {
   font-size: 32px;
   letter-spacing: 0.12em;
 }
+
+/* Fase 7: recorrido de la persona (tablero, ficha, seguimientos, contenidos) */
+.journey-board {
+  display: grid;
+  gap: 16px;
+}
+.funnel {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  margin: 16px 0 0;
+  list-style: none;
+}
+.funnel li {
+  display: grid;
+  grid-template-columns: 190px 1fr 48px;
+  gap: 12px;
+  align-items: center;
+}
+.funnel-label {
+  font-size: 16px;
+}
+.funnel-bar {
+  height: 18px;
+  overflow: hidden;
+  background: var(--line);
+  border-radius: 999px;
+}
+.funnel-bar i {
+  display: block;
+  height: 100%;
+  background: var(--aqua-dark);
+}
+.funnel strong {
+  font-size: 20px;
+  text-align: right;
+}
+.attention-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.attention {
+  display: grid;
+  gap: 4px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.attention strong {
+  font-size: 34px;
+  line-height: 1;
+}
+.attention-alert {
+  background: #f5dcdc;
+  border-color: #d9a3a3;
+}
+.admin-table-wrap {
+  overflow-x: auto;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+.admin-table th,
+.admin-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+.admin-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.admin-link {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  font-size: 15px;
+}
+.admin-link code {
+  word-break: break-all;
+}
+.admin-link button {
+  min-height: 36px;
+  padding: 0 12px;
+  background: transparent;
+  border: 2px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.timeline {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-left: 3px solid var(--line);
+}
+.timeline li {
+  display: grid;
+  gap: 2px;
+  padding: 0 0 16px 16px;
+  position: relative;
+}
+.timeline li::before {
+  position: absolute;
+  top: 6px;
+  left: -8px;
+  width: 13px;
+  height: 13px;
+  content: '';
+  background: var(--aqua-dark);
+  border: 2px solid var(--surface);
+  border-radius: 50%;
+}
+.timeline-asistencia::before {
+  background: #1d5b3a;
+}
+.timeline-seguimiento::before {
+  background: #8a5a00;
+}
+.timeline time {
+  color: var(--muted);
+  font-size: 15px;
+}
+.timeline span {
+  color: var(--muted);
+}
+@media (max-width: 680px) {
+  .funnel li {
+    grid-template-columns: 1fr 40px;
+  }
+  .funnel-bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .attention-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Admin panels: card headings were inheriting the large marketing size. */
+section.section .login-card h2,
+.journey-board h2 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  line-height: 1.2;
+}
+section.section .login-card h3 {
+  margin: 16px 0 8px;
+  font-size: 22px;
+}
+
+/* Admin cards fill the content column instead of the narrow login-card width. */
+.journey-board {
+  grid-template-columns: minmax(0, 1fr);
+}
+.admin-tabs ~ .login-card,
+.journey-board .login-card {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 0 16px;
+  padding: clamp(20px, 3vw, 32px);
+}
+.admin-tabs ~ .login-card + .login-card {
+  margin-top: 0;
+}

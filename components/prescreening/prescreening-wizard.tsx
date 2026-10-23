@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight, Check, ShieldCheck } from 'lucide-react'
 import type { Outcome } from '@/lib/prescreening'
 import { STEPS, type Draft, type StepDef } from './questions'
 import { PrescreeningResult } from './prescreening-result'
+import { readAttribution } from '@/components/attribution-capture'
 
 type Status = 'answering' | 'saving' | 'done'
 
@@ -64,7 +65,7 @@ export function PrescreeningWizard() {
       const response = await fetch('/api/prescreening', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ name, phone, consent, answers }),
+        body: JSON.stringify({ name, phone, consent, answers, attribution: readAttribution() }),
       })
       const result = (await response.json()) as { error?: string; outcome?: Outcome }
       if (!response.ok || !result.outcome) {

@@ -3,6 +3,10 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { AccessCodePanel } from '@/components/admin/access-code-panel'
 import { BookingsPanel } from '@/components/admin/bookings-panel'
+import { ContentsPanel } from '@/components/admin/contents-panel'
+import { FollowupsPanel } from '@/components/admin/followups-panel'
+import { JourneyBoard } from '@/components/admin/journey-board'
+import { PeoplePanel } from '@/components/admin/people-panel'
 import { PrescreeningsPanel } from '@/components/admin/prescreenings-panel'
 import { RequestsPanel } from '@/components/admin/requests-panel'
 
@@ -15,17 +19,29 @@ type Client = {
   planExpiresAt: string
 }
 
-type Tab = 'reservas' | 'solicitudes' | 'prevaloraciones' | 'clientes'
+type Tab =
+  | 'tablero'
+  | 'personas'
+  | 'seguimientos'
+  | 'reservas'
+  | 'solicitudes'
+  | 'prevaloraciones'
+  | 'contenidos'
+  | 'clientes'
 
 const TABS: { id: Tab; label: string }[] = [
+  { id: 'tablero', label: 'Tablero' },
+  { id: 'personas', label: 'Personas' },
+  { id: 'seguimientos', label: 'Seguimientos' },
   { id: 'reservas', label: 'Reservas de clases' },
   { id: 'solicitudes', label: 'Solicitudes de cita' },
   { id: 'prevaloraciones', label: 'Pre-valoraciones' },
+  { id: 'contenidos', label: 'Contenidos' },
   { id: 'clientes', label: 'Clientes y créditos' },
 ]
 
 export function AdminDashboard({ userName }: { userName: string }) {
-  const [tab, setTab] = useState<Tab>('reservas')
+  const [tab, setTab] = useState<Tab>('tablero')
   const [clients, setClients] = useState<Client[]>([])
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
@@ -82,6 +98,10 @@ export function AdminDashboard({ userName }: { userName: string }) {
             </button>
           ))}
         </div>
+        {tab === 'tablero' && <JourneyBoard />}
+        {tab === 'personas' && <PeoplePanel />}
+        {tab === 'seguimientos' && <FollowupsPanel />}
+        {tab === 'contenidos' && <ContentsPanel />}
         {tab === 'reservas' && <BookingsPanel />}
         {tab === 'solicitudes' && <RequestsPanel />}
         {tab === 'prevaloraciones' && <PrescreeningsPanel />}
